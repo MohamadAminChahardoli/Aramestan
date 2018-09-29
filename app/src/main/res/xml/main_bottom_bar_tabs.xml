@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <tabs xmlns:android="http://schemas.android.com/apk/res/android">
+        <tab
+            id="@+id/tab_ads"
+            icon="@drawable/ads"
+            title="تبلیغات"/>
+        <tab
+            id="@+id/tab_search"
+            icon="@drawable/loupe"
+            title="جستجو"/>
+        <tab
+            id="@+id/tab_notifications"
+            icon="@drawable/notification"
+            title="اعلانات" />
+    </tabs>
