@@ -1,12 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+    <android.support.v7.widget.CardView
+        android:id="@+id/search_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="3dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edt_name_family"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/edt_search_style"
+                android:hint="@string/text_hint_name_family"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/hintTextColor"/>
+
+            <EditText
+                android:id="@+id/edt_father_name"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/edt_search_style"
+                android:hint="@string/text_hint_father_name"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/hintTextColor"
+                android:layout_below="@+id/edt_name_family"/>
+
+            <RadioGroup
+                android:id="@+id/rg_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layoutDirection="rtl"
+                android:gravity="center"
+                android:layout_below="@+id/edt_father_name"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="جنسیت : "/>
+                <RadioButton
+                    android:id="@+id/rb_male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="آقا"
+                    android:layout_marginStart="15dp"/>
+                <RadioButton
+                    android:id="@+id/rb_female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="خانم"
+                    android:layout_marginStart="15dp"/>
+
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/btn_choose_date_of_death"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/rg_gender"
+                android:layout_centerHorizontal="true"
+                android:text="زمان فوت"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="?android:selectableItemBackground"/>
+
+            <Button
+                android:id="@+id/btn_search"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/btn_choose_date_of_death"
+                android:layout_centerHorizontal="true"
+                android:text="جستجو کن"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_search_result"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="search"/>
+        android:layout_below="@+id/search_panel"/>
+
 
 </RelativeLayout>

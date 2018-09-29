@@ -3,4 +3,6 @@
     <string name="tab_ads_title">تبلیغات</string>
     <string name="tab_search_title">جستجو</string>
     <string name="tab_notifications_title">اعلانات</string>
+    <string name="text_hint_name_family">نام و نام خانوادگی مرحوم</string>
+    <string name="text_hint_father_name">نام پدر</string>
 </resources>
