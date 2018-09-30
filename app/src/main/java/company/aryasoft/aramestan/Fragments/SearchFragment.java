@@ -50,7 +50,7 @@ public class SearchFragment extends Fragment implements Button.OnClickListener {
         deceasedList.add(new Deceased(1, "میرزا قاسمی", "جلال آل احمد", "No Image", "هنرمند"));
         deceasedList.add(new Deceased(1, "صابر رجبی", "حجت الله", "No Image", ""));
 
-        DeceasedAdapter deceasedAdapter = new DeceasedAdapter(deceasedList);
+        DeceasedAdapter deceasedAdapter = new DeceasedAdapter(deceasedList, getActivity());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(MyApplication.getContext());
         RecyclerViewSearchResult.setLayoutManager(mLayoutManager);
         RecyclerViewSearchResult.setItemAnimator(new DefaultItemAnimator());

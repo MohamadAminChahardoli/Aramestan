@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.DetailActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_deceased_photo_detail"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/no_img"
+                app:civ_border_width="0dp"
+                app:civ_border_color="#FF000000"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_title_full_name_detail"
+                android:text="شهید نام نام خانوادگی"
+                android:layout_below="@+id/img_deceased_photo_detail"
+                android:layout_centerHorizontal="true"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_father_name_detail"
+                android:text="فرزند نام پدر"
+                android:layout_below="@+id/txt_title_full_name_detail"
+                android:layout_centerHorizontal="true"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_birth_date"
+                android:text="تاریخ تولد"
+                android:layout_below="@+id/txt_father_name_detail"
+                android:layout_centerHorizontal="true"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"/>
+            PlaceMartyr
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_dead_date"
+                android:text="تاریخ وفات"
+                android:layout_below="@+id/txt_birth_date"
+                android:layout_centerHorizontal="true"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_place_martyr"
+                android:text="محل شهادت"
+                android:layout_below="@+id/txt_dead_date"
+                android:layout_centerHorizontal="true"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_place_martyr"
+                android:background="@drawable/border_style_1"
+                android:layout_marginTop="20dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:id="@+id/txt_grave_address_title_"
+                    android:text="نشانی قبر مرحوم"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:background="@drawable/txt_grave_title_style"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txt_block_name"
+                    android:text="نام قطعه"
+                    android:layout_below="@+id/txt_grave_address_title_"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="16sp"
+                    android:layout_marginTop="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txt_row_number"
+                    android:text="شماره ردیف: 75242"
+                    android:layout_below="@+id/txt_block_name"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="16sp"
+                    android:layout_marginTop="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txt_grave_number"
+                    android:text="شماره قبر: 68473"
+                    android:layout_below="@+id/txt_row_number"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="16sp"
+                    android:layout_marginTop="5dp"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

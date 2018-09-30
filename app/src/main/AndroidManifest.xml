@@ -3,33 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="company.aryasoft.aramestan">
 
+    <uses-sdk tools:overrideLibrary="co.ronash.pushe" />
 
-    <uses-sdk
-        tools:overrideLibrary="co.ronash.pushe" />
     <permission
         android:name="company.aryasoft.aramestan.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission
-        android:name="company.aryasoft.aramestan.permission.C2D_MESSAGE" />
-    <uses-permission
-        android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="company.aryasoft.aramestan.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- Optional permissions -->
-    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-
-
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
-        android:name="company.aryasoft.aramestan.App.MyApplication"
+        android:name=".App.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name="company.aryasoft.aramestan.Activities.MainActivity">
+        <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,8 +32,7 @@
             </intent-filter>
         </activity>
 
-
-        <receiver android:name="co.ronash.pushe.receiver.UpdateReceiver" >
+        <receiver android:name="co.ronash.pushe.receiver.UpdateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
 
@@ -47,23 +41,26 @@
                     android:scheme="package" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
                 <category android:name="company.aryasoft.aramestan" />
             </intent-filter>
         </receiver>
 
-        <meta-data android:name="co.ronash.pushe.token" android:value="PUSHE_737115392191"/>
-        <meta-data android:name="co.ronash.pushe.cr" android:value="Tm9uZQ=="/>
+        <meta-data
+            android:name="co.ronash.pushe.token"
+            android:value="PUSHE_737115392191" />
+        <meta-data
+            android:name="co.ronash.pushe.cr"
+            android:value="Tm9uZQ==" />
 
+        <activity android:name=".Activities.DetailActivity"></activity>
     </application>
 
 </manifest>

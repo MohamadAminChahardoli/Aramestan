@@ -5,7 +5,6 @@ public class DetailDeceased {
     private int DeadId;
     private String FullName;
     private String FatherName;
-    private int Gender;
     private String BirthDate;
     private String DeadDate;
     private String PlaceMartyr;
@@ -15,18 +14,18 @@ public class DetailDeceased {
     private String Lang;
     private String ImageName;
     private String DefunctTitle;
+    private String BlockName;
 
     public DetailDeceased() {
     }
 
     public DetailDeceased(int deadId, String fullName, String fatherName,
-                          int gender, String birthDate, String deadDate,
+                          String birthDate, String deadDate,
                           String placeMartyr, int rowNumber, int graveNumber,
-                          String lat, String lang, String imageName, String defunctTitle) {
+                          String lat, String lang, String imageName, String defunctTitle, String blockName) {
         DeadId = deadId;
         FullName = fullName;
         FatherName = fatherName;
-        Gender = gender;
         BirthDate = birthDate;
         DeadDate = deadDate;
         PlaceMartyr = placeMartyr;
@@ -36,6 +35,7 @@ public class DetailDeceased {
         Lang = lang;
         ImageName = imageName;
         DefunctTitle = defunctTitle;
+        BlockName = blockName;
     }
 
     public int getDeadId() {
@@ -48,10 +48,6 @@ public class DetailDeceased {
 
     public String getFatherName() {
         return FatherName;
-    }
-
-    public int getGender() {
-        return Gender;
     }
 
     public String getBirthDate() {
@@ -90,6 +86,10 @@ public class DetailDeceased {
         return DefunctTitle;
     }
 
+    public String getBlockName() {
+        return BlockName;
+    }
+
     public void setDeadId(int deadId) {
         DeadId = deadId;
     }
@@ -100,10 +100,6 @@ public class DetailDeceased {
 
     public void setFatherName(String fatherName) {
         FatherName = fatherName;
-    }
-
-    public void setGender(int gender) {
-        Gender = gender;
     }
 
     public void setBirthDate(String birthDate) {
@@ -142,4 +138,7 @@ public class DetailDeceased {
         DefunctTitle = defunctTitle;
     }
 
+    public void setBlockName(String blockName) {
+        BlockName = blockName;
+    }
 }

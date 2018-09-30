@@ -1,25 +1,33 @@
 package company.aryasoft.aramestan.Adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
+import company.aryasoft.aramestan.Activities.DetailActivity;
+import company.aryasoft.aramestan.Activities.MainActivity;
+import company.aryasoft.aramestan.App.MyApplication;
 import company.aryasoft.aramestan.Models.Deceased;
 import company.aryasoft.aramestan.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DeceasedAdapter extends RecyclerView.Adapter<DeceasedAdapter.DeceasedViewHolder> {
+public class DeceasedAdapter extends RecyclerView.Adapter<DeceasedAdapter.DeceasedViewHolder> implements Button.OnClickListener {
 
     private List<Deceased> DeceasedList;
+    private Context ContextInstance;
 
-    public DeceasedAdapter(List<Deceased> deceasedList) {
+    public DeceasedAdapter(List<Deceased> deceasedList, Context context) {
         DeceasedList = deceasedList;
+        ContextInstance = context;
     }
 
     @NonNull
@@ -39,11 +47,18 @@ public class DeceasedAdapter extends RecyclerView.Adapter<DeceasedAdapter.Deceas
         deceasedViewHolder.TextTitleFullName.setText(titleAndFullName);
         String fatherName = "فرزند " + deceased.getFatherName();
         deceasedViewHolder.TextFatherName.setText(fatherName);
+        deceasedViewHolder.itemView.setOnClickListener(this);
     }
 
     @Override
     public int getItemCount() {
         return DeceasedList.size();
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent detailActivityIntent = new Intent(ContextInstance, DetailActivity.class);
+        ContextInstance.startActivity(detailActivityIntent);
     }
 
     public class DeceasedViewHolder extends RecyclerView.ViewHolder
