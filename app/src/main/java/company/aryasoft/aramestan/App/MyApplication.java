@@ -3,6 +3,7 @@ package company.aryasoft.aramestan.App;
 import android.app.Application;
 import android.content.Context;
 
+import co.ronash.pushe.Pushe;
 import company.aryasoft.aramestan.R;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -16,6 +17,7 @@ public class MyApplication extends Application {
         super.onCreate();
         context = getApplicationContext();
         initializeCalligraphy();
+        Pushe.initialize(this, true);
     }
 
     public static Context getContext()
