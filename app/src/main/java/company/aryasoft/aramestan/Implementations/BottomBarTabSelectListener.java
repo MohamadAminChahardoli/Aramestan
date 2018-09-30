@@ -1,17 +1,16 @@
-package soft.mohamadamin.aramestan.Implementations;
+package company.aryasoft.aramestan.Implementations;
 
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 
 import com.roughike.bottombar.OnTabSelectListener;
 
-import soft.mohamadamin.aramestan.Activities.MainActivity;
-import soft.mohamadamin.aramestan.Fragments.AdvertisementsFragment;
-import soft.mohamadamin.aramestan.Fragments.NotificationsFragment;
-import soft.mohamadamin.aramestan.Fragments.SearchFragment;
-import soft.mohamadamin.aramestan.R;
+import company.aryasoft.aramestan.Activities.MainActivity;
+import company.aryasoft.aramestan.Fragments.AdvertisementsFragment;
+import company.aryasoft.aramestan.Fragments.NotificationsFragment;
+import company.aryasoft.aramestan.Fragments.SearchFragment;
+import company.aryasoft.aramestan.R;
 
 public class BottomBarTabSelectListener implements OnTabSelectListener {
 

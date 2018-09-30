@@ -1,4 +1,4 @@
-package soft.mohamadamin.aramestan;
+package company.aryasoft.aramestan;
 
 import org.junit.Test;
 

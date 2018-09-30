@@ -1,16 +1,13 @@
-package soft.mohamadamin.aramestan.Activities;
+package company.aryasoft.aramestan.Activities;
 
 import android.content.Context;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.roughike.bottombar.BottomBar;
 
-import soft.mohamadamin.aramestan.Fragments.SearchFragment;
-import soft.mohamadamin.aramestan.Implementations.BottomBarTabSelectListener;
-import soft.mohamadamin.aramestan.R;
+import company.aryasoft.aramestan.Implementations.BottomBarTabSelectListener;
+import company.aryasoft.aramestan.R;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity   {

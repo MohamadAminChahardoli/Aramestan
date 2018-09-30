@@ -1,4 +1,4 @@
-package soft.mohamadamin.aramestan.Fragments;
+package company.aryasoft.aramestan.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog;
 import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
 
-import soft.mohamadamin.aramestan.R;
+import company.aryasoft.aramestan.R;
 
 public class SearchFragment extends Fragment {
 
@@ -45,7 +45,7 @@ public class SearchFragment extends Fragment {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                        Toast.makeText(getActivity(), year + "/" + monthOfYear + "/" + dayOfMonth, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), year + "/" + monthOfYear+1 + "/" + dayOfMonth, Toast.LENGTH_LONG).show();
                     }
                 },
                 now.getPersianYear(),

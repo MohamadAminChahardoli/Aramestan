@@ -1,9 +1,9 @@
-package soft.mohamadamin.aramestan.App;
+package company.aryasoft.aramestan.App;
 
 import android.app.Application;
 import android.content.Context;
 
-import soft.mohamadamin.aramestan.R;
+import company.aryasoft.aramestan.R;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class MyApplication extends Application {
