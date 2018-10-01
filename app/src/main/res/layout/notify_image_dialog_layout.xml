@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="30dp">
+
+
+    <ImageView
+
+        android:id="@+id/img_notifies_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/slider1">
+
+    </ImageView>
+
+    <ImageButton
+        android:id="@+id/btn_close_notifies_dialog"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|right"
+        android:background="#33000000"
+        android:clickable="true"
+        android:focusable="true"
+        app:srcCompat="@drawable/ic_close_notifies_dialog"/>
+</FrameLayout>

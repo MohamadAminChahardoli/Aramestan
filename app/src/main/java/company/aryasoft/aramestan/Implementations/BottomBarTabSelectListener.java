@@ -7,8 +7,8 @@ import android.support.v4.app.FragmentTransaction;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import company.aryasoft.aramestan.Activities.MainActivity;
-import company.aryasoft.aramestan.Fragments.AdvertisementsFragment;
-import company.aryasoft.aramestan.Fragments.NotificationsFragment;
+import company.aryasoft.aramestan.Fragments.AdvertisementFragment;
+import company.aryasoft.aramestan.Fragments.NotifiesFragment;
 import company.aryasoft.aramestan.Fragments.SearchFragment;
 import company.aryasoft.aramestan.R;
 
@@ -28,7 +28,7 @@ public class BottomBarTabSelectListener implements OnTabSelectListener {
     private void showTabContent(int tabId) {
         if (tabId == R.id.tab_ads)
         {
-            replaceFragment(new AdvertisementsFragment());
+            replaceFragment(new AdvertisementFragment());
         }
         else if (tabId == R.id.tab_search)
         {
@@ -36,7 +36,7 @@ public class BottomBarTabSelectListener implements OnTabSelectListener {
         }
         else if (tabId == R.id.tab_notifications)
         {
-            replaceFragment(new NotificationsFragment());
+            replaceFragment(new NotifiesFragment());
         }
     }
 

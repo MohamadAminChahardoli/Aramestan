@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F3F3F3"
+    android:orientation="vertical">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_notifies_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        app:layoutManager="android.support.v7.widget.GridLayoutManager"
+        tools:listitem="@layout/notifies_recycler_view_item"
+        tools:spanCount="2"/>
+
+    <RelativeLayout
+        android:id="@+id/rel_data_behaviour"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/img_no_notify"
+            android:layout_width="150dp"
+            android:layout_height="180dp"
+            android:layout_centerInParent="true"
+            android:layout_margin="8dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/no_data"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_no_notify"
+            android:gravity="center_horizontal"
+            android:text="@string/no_notify_text"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+</LinearLayout>

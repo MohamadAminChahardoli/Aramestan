@@ -122,6 +122,17 @@
                     android:textSize="16sp"
                     android:layout_marginTop="5dp"/>
 
+                <Button
+                    android:id="@+id/btn_show_location"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/txt_grave_number"
+                    android:layout_centerHorizontal="true"
+                    android:text="نمایش محل دفن روی نقشه"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="5dp"
+                    android:drawableEnd="@drawable/route"/>
+
             </RelativeLayout>
 
         </RelativeLayout>
