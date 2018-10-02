@@ -4,7 +4,7 @@
     package="company.aryasoft.aramestan">
 
     <uses-sdk tools:overrideLibrary="co.ronash.pushe" />
-
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <permission
         android:name="company.aryasoft.aramestan.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
