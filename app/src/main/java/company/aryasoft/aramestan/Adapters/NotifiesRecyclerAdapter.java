@@ -17,12 +17,12 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-import company.aryasoft.aramestan.Models.NotifiesDataModel;
+import company.aryasoft.aramestan.Models.Announcement;
 import company.aryasoft.aramestan.R;
 
 public class NotifiesRecyclerAdapter extends RecyclerView.Adapter<NotifiesRecyclerAdapter.NotifiesRecyclerAdapterViewHolder>
 {
-    private ArrayList<NotifiesDataModel> notifiesDataList;
+    private ArrayList<Announcement> notifiesDataList;
     private Context context;
 
     public NotifiesRecyclerAdapter(Context context)
@@ -42,13 +42,13 @@ public class NotifiesRecyclerAdapter extends RecyclerView.Adapter<NotifiesRecycl
     @Override
     public void onBindViewHolder(@NonNull final NotifiesRecyclerAdapterViewHolder holder, int position)
     {
-        Glide.with(context).load(context.getString(R.string.ImageFolderName) + notifiesDataList.get(position).NotifiesImageName).into(holder.imgNotifies);
+        Glide.with(context).load(context.getString(R.string.ImageFolderName) + notifiesDataList.get(position).ImageName).into(holder.imgNotifies);
         holder.imgNotifies.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                ShowNotifyImageDialog(context.getString(R.string.ImageFolderName) + notifiesDataList.get(holder.getAdapterPosition()).NotifiesImageName);
+                ShowNotifyImageDialog(context.getString(R.string.ImageFolderName) + notifiesDataList.get(holder.getAdapterPosition()).ImageName);
             }
         });
     }
@@ -59,7 +59,7 @@ public class NotifiesRecyclerAdapter extends RecyclerView.Adapter<NotifiesRecycl
         return notifiesDataList.size();
     }
 
-    public void addNotifiesDataList(ArrayList<NotifiesDataModel> notifiesDataList)
+    public void addNotifiesDataList(ArrayList<Announcement> notifiesDataList)
     {
         this.notifiesDataList.addAll(notifiesDataList);
         this.notifyDataSetChanged();

@@ -35,8 +35,8 @@ public class NotifySliderAdapter extends PagerAdapter
         View imageLayout = inflater.inflate(R.layout.slider_item_layout, view, false);
         ImageView imgSlider = imageLayout.findViewById(R.id.img_slider);
         TextView sliderTitle=imageLayout.findViewById(R.id.slider_title);
-        Glide.with(context).load(sliderList.get(position).ImageName).into(imgSlider);
-        sliderTitle.setText(sliderList.get(position).ImageTitle);
+        Glide.with(context).load(context.getString(R.string.ImageFolderName)+sliderList.get(position).ImageName).into(imgSlider);
+        sliderTitle.setText(sliderList.get(position).SliderTitle1);
         view.addView(imageLayout);
         return imageLayout;
     }

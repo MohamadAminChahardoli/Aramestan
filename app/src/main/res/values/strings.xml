@@ -7,5 +7,5 @@
     <string name="text_hint_father_name">نام پدر</string>
     <string name="no_notify_text">در سیستم اعلانی یافت نشد !</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="ImageFolderName"> </string>
+    <string name="ImageFolderName">http://test.aryasoft.org/Images/</string>
 </resources>

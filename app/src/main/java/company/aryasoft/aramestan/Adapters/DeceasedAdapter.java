@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import company.aryasoft.aramestan.Activities.DetailActivity;
@@ -24,7 +25,10 @@ public class DeceasedAdapter extends RecyclerView.Adapter<DeceasedAdapter.Deceas
 
     private List<Deceased> DeceasedList;
     private Context ContextInstance;
-
+    public DeceasedAdapter(Context context) {
+        DeceasedList = new ArrayList<>();
+        ContextInstance = context;
+    }
     public DeceasedAdapter(List<Deceased> deceasedList, Context context) {
         DeceasedList = deceasedList;
         ContextInstance = context;
@@ -43,7 +47,7 @@ public class DeceasedAdapter extends RecyclerView.Adapter<DeceasedAdapter.Deceas
     public void onBindViewHolder(@NonNull DeceasedViewHolder deceasedViewHolder, int position) {
         Deceased deceased = DeceasedList.get(position);
         //deceasedViewHolder.ImageDeceasedPhoto.setBackgroundResource(deceased.getImageName());
-        String titleAndFullName = deceased.getDefunctTitle()+" "+deceased.getFullName();
+        String titleAndFullName = deceased.getDefunctTitle() + " " + deceased.getFullName();
         deceasedViewHolder.TextTitleFullName.setText(titleAndFullName);
         String fatherName = "فرزند " + deceased.getFatherName();
         deceasedViewHolder.TextFatherName.setText(fatherName);
@@ -55,14 +59,19 @@ public class DeceasedAdapter extends RecyclerView.Adapter<DeceasedAdapter.Deceas
         return DeceasedList.size();
     }
 
+
     @Override
     public void onClick(View v) {
         Intent detailActivityIntent = new Intent(ContextInstance, DetailActivity.class);
         ContextInstance.startActivity(detailActivityIntent);
     }
 
-    public class DeceasedViewHolder extends RecyclerView.ViewHolder
-    {
+    public void addDeceasedListData(List<Deceased> DeceasedList) {
+        this.DeceasedList.addAll(DeceasedList);
+        this.notifyDataSetChanged();
+    }
+
+    public class DeceasedViewHolder extends RecyclerView.ViewHolder {
         public CircleImageView ImageDeceasedPhoto;
         public TextView TextTitleFullName;
         public TextView TextFatherName;
@@ -72,11 +81,11 @@ public class DeceasedAdapter extends RecyclerView.Adapter<DeceasedAdapter.Deceas
             initializeViews(itemView);
         }
 
-        private void initializeViews(View view)
-        {
+        private void initializeViews(View view) {
             ImageDeceasedPhoto = view.findViewById(R.id.img_deceased_photo);
             TextTitleFullName = view.findViewById(R.id.txt_title_full_name);
             TextFatherName = view.findViewById(R.id.txt_father_name);
         }
     }
+
 }

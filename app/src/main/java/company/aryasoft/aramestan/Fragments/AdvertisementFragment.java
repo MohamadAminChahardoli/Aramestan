@@ -1,6 +1,7 @@
 package company.aryasoft.aramestan.Fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -8,34 +9,52 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Slide;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import company.aryasoft.aramestan.Adapters.AdvertisementRecyclerAdapter;
 import company.aryasoft.aramestan.Adapters.NotifySliderAdapter;
+import company.aryasoft.aramestan.ApiConnection.ApiServiceGenerator;
+import company.aryasoft.aramestan.ApiConnection.DeceasedApis;
+import company.aryasoft.aramestan.Implementations.SliderCallBackImpl;
 import company.aryasoft.aramestan.Models.SliderDataModel;
 import company.aryasoft.aramestan.R;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class AdvertisementFragment extends Fragment
+        implements SliderCallBackImpl.OnSlidesDownloadedListener
 {
 
     private RecyclerView recyclerAdvertisement;
     private AdvertisementRecyclerAdapter advertisementAdapter;
     private ViewPager sliderPager;
     private static int currentPage = 0;
-    private ArrayList<SliderDataModel> sliderList;
+    private DeceasedApis Api;
+    private Call<List<SliderDataModel>> SliderCall;
+    Context context;
 
     public AdvertisementFragment()
     {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Api = ApiServiceGenerator.getApiService();
+        SliderCall = Api.getSlider();
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -47,25 +66,43 @@ public class AdvertisementFragment extends Fragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        context=view.getContext();
         initializeComponents(view);
         initializeComponentsEvents();
     }
 
+    @Override
+    public void onSlidesDownloaded(Response<List<SliderDataModel>> response) {
+        ArrayList<SliderDataModel> slides = new ArrayList<>
+                (response.body() == null ? new ArrayList<SliderDataModel>() : response.body());
+        setupSlider(slides);
+    }
 
-    private void initializeComponents(View view)
+    private void initializeComponents(final View view)
     {
         recyclerAdvertisement = view.findViewById(R.id.recycler_advertisement_fragment);
         sliderPager = view.findViewById(R.id.slider_pager);
         advertisementAdapter=new AdvertisementRecyclerAdapter(view.getContext());
         recyclerAdvertisement.setAdapter(advertisementAdapter);
-        //---
-        sliderPager.setAdapter(new NotifySliderAdapter(view.getContext(), GetDummySlider()));
-        final Handler handler = new Handler();
+        
+
+    }
+
+    private void initializeComponentsEvents()
+    {
+        SliderCall.enqueue(new SliderCallBackImpl(this));
+    }
+    
+    private void setupSlider(final ArrayList<SliderDataModel> slides)
+    {
+        sliderPager.setAdapter(new NotifySliderAdapter(context, slides));
+        Toast.makeText(context, slides.size()+"", Toast.LENGTH_SHORT).show();
+       final Handler handler = new Handler();
         final Runnable Update = new Runnable()
         {
             public void run()
             {
-                if (currentPage == sliderList.size())
+                if (currentPage == slides.size())
                 {
                     currentPage = 0;
                 }
@@ -81,31 +118,8 @@ public class AdvertisementFragment extends Fragment
                 handler.post(Update);
             }
         }, 3000, 3000);
-    }
-
-    private void initializeComponentsEvents()
-    {
 
     }
 
-    private ArrayList<SliderDataModel> GetDummySlider()
-    {
-        sliderList = new ArrayList<>();
-        SliderDataModel objSlider1 = new SliderDataModel();
-        objSlider1.ImageName = R.drawable.slider1;
-        objSlider1.ImageTitle = "متن اول از اسلایدر ";
-        sliderList.add(objSlider1);
-
-        SliderDataModel objSlider2 = new SliderDataModel();
-        objSlider2.ImageName = R.drawable.slider2;
-        objSlider2.ImageTitle = "متن دوم از اسلایدر ";
-        sliderList.add(objSlider2);
-
-        SliderDataModel objSlider3 = new SliderDataModel();
-        objSlider3.ImageName = R.drawable.slider3;
-        objSlider3.ImageTitle = "متن سوم از اسلایدر ";
-        sliderList.add(objSlider3);
-        return sliderList;
-    }
 
 }

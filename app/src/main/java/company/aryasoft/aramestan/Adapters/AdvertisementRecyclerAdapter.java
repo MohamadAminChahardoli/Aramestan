@@ -13,12 +13,12 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-import company.aryasoft.aramestan.Models.NotifiesDataModel;
+import company.aryasoft.aramestan.Models.Announcement;
 import company.aryasoft.aramestan.R;
 
 public class AdvertisementRecyclerAdapter extends RecyclerView.Adapter<AdvertisementRecyclerAdapter.NotifiesRecyclerAdapterViewHolder>
 {
-    private ArrayList<NotifiesDataModel> notifiesDataList;
+    private ArrayList<Announcement> notifiesDataList;
     private Context context;
 
     public AdvertisementRecyclerAdapter(Context context)
@@ -38,7 +38,7 @@ public class AdvertisementRecyclerAdapter extends RecyclerView.Adapter<Advertise
     @Override
     public void onBindViewHolder(@NonNull NotifiesRecyclerAdapterViewHolder holder, int position)
     {
-        Glide.with(context).load("URL"+notifiesDataList.get(position).NotifiesImageName).into(holder.imgNotifies);
+        Glide.with(context).load("URL"+notifiesDataList.get(position).ImageName).into(holder.imgNotifies);
         holder.imgNotifies.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -55,7 +55,7 @@ public class AdvertisementRecyclerAdapter extends RecyclerView.Adapter<Advertise
        return notifiesDataList.size();
     }
 
-    public void addNotifiesDataList(ArrayList<NotifiesDataModel> notifiesDataList)
+    public void addNotifiesDataList(ArrayList<Announcement> notifiesDataList)
     {
         this.notifiesDataList.addAll(notifiesDataList);
         this.notifyDataSetChanged();
