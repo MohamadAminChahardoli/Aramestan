@@ -34,6 +34,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".Activities.DetailActivity">
+
+        </activity>
+
         <receiver android:name="co.ronash.pushe.receiver.UpdateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
@@ -62,7 +66,6 @@
             android:name="co.ronash.pushe.cr"
             android:value="Tm9uZQ==" />
 
-        <activity android:name=".Activities.DetailActivity"></activity>
     </application>
 
 </manifest>

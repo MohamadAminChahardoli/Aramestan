@@ -11,10 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
-import com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog;
-import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
 
+import com.shawnlin.numberpicker.NumberPicker;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import company.aryasoft.aramestan.Adapters.DeceasedAdapter;
 import company.aryasoft.aramestan.ApiConnection.ApiServiceGenerator;
@@ -28,18 +33,25 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class SearchFragment extends Fragment
-        implements Button.OnClickListener, SearchCallBackImpl.OnResultReceived {
+        implements Button.OnClickListener, SearchCallBackImpl.OnResultReceived, NumberPicker.OnValueChangeListener {
 
     private DeceasedAdapter deceasedAdapter;
-    private Button ButtonChooseDateOfDeath;
     private Button ButtonSearch;
+    private EditText EdtFirstName;
+    private EditText EdtLastName;
+    private EditText EdtFatherName;
+    private RadioButton RBMeal;
+    private RadioButton RBFeMeal;
     private RecyclerView RecyclerViewSearchResult;
+    private NumberPicker NumberPickerDeadYear;
     private DeceasedApis Api;
     private Call<List<Deceased>> SearchCall;
     private int DefaultSkipItems = 0;
     private int DefaultTakeItems = 20;
     private boolean IsLoading=false;
     private boolean DataEnded=false;
+    private int YearOfDead = 0;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,9 +66,7 @@ public class SearchFragment extends Fragment
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btn_choose_date_of_death) {
-            showPersianDatePicker();
-        } else if (view.getId() == R.id.btn_search) {
+        if (view.getId() == R.id.btn_search) {
             search();
         }
     }
@@ -84,36 +94,29 @@ public class SearchFragment extends Fragment
      
     }
 
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+        YearOfDead = newVal;
+    }
+
     private void initializeViews(View view)
     {
-        ButtonChooseDateOfDeath = view.findViewById(R.id.btn_choose_date_of_death);
         ButtonSearch = view.findViewById(R.id.btn_search);
         RecyclerViewSearchResult = view.findViewById(R.id.recycler_view_search_result);
-        ButtonChooseDateOfDeath.setOnClickListener(this);
+        EdtFirstName = view.findViewById(R.id.edt_first_name);
+        EdtLastName = view.findViewById(R.id.edt_last_name);
+        EdtFatherName = view.findViewById(R.id.edt_father_name);
+        RBMeal = view.findViewById(R.id.rb_male);
+        RBFeMeal = view.findViewById(R.id.rb_female);
+        NumberPickerDeadYear = view.findViewById(R.id.number_picker);
         ButtonSearch.setOnClickListener(this);
         setupSearchResultRecyclerView();
+        setupNumberPicker();
     }
 
     private void initializeComponentsEvents()
     {
 
-    }
-
-    private void showPersianDatePicker() {
-        PersianCalendar now = new PersianCalendar();
-        DatePickerDialog dpd = DatePickerDialog.newInstance(
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                        Toast.makeText(getActivity(), year + "/" + monthOfYear + 1 + "/" + dayOfMonth, Toast.LENGTH_LONG).show();
-                    }
-                },
-                now.getPersianYear(),
-                now.getPersianMonth(),
-                now.getPersianDay()
-        );
-        dpd.setThemeDark(false);
-        dpd.show(getActivity().getFragmentManager(), "");
     }
 
     private void search()
@@ -125,11 +128,11 @@ public class SearchFragment extends Fragment
     private SearchModel getSearchModel()
     {
         SearchModel searchModel = new SearchModel();
-        searchModel.setFirstName("");
-        searchModel.setLastName("");
-        searchModel.setFatherName("");
-        searchModel.setDeadDate("");
-        searchModel.setSex(true);
+        searchModel.setFirstName(EdtFirstName.getText().toString());
+        searchModel.setLastName(EdtLastName.getText().toString());
+        searchModel.setFatherName(EdtFatherName.getText().toString());
+        searchModel.setDeadDate(YearOfDead);
+        searchModel.setSex(RBMeal.isChecked());
         return searchModel;
     }
 
@@ -164,5 +167,19 @@ public class SearchFragment extends Fragment
             }
         });
     }
+
+    private void setupNumberPicker()
+    {
+        NumberPickerDeadYear.setMinValue(1350);
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        int differenceBetweenDateOfADAndDateOfShem = 621;
+        NumberPickerDeadYear.setMaxValue(currentYear - differenceBetweenDateOfADAndDateOfShem);
+        NumberPickerDeadYear.setValue(1380);
+        NumberPickerDeadYear.setFadingEdgeEnabled(true);
+        NumberPickerDeadYear.setScrollerEnabled(true);
+        NumberPickerDeadYear.setWrapSelectorWheel(true);
+        NumberPickerDeadYear.setOnValueChangedListener(this);
+    }
+
 
 }

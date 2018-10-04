@@ -11,91 +11,129 @@
         app:cardCornerRadius="0dp"
         app:cardElevation="3dp">
 
-        <RelativeLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/edt_name_family"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="40dp"
-                android:background="@drawable/edt_search_style"
-                android:hint="@string/text_hint_name_family"
-                android:gravity="center"
-                android:textSize="14sp"
-                android:textColor="@color/textColor"
-                android:textColorHint="@color/hintTextColor"/>
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/edt_father_name"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="40dp"
-                android:background="@drawable/edt_search_style"
-                android:hint="@string/text_hint_father_name"
-                android:gravity="center"
-                android:textSize="14sp"
-                android:textColor="@color/textColor"
-                android:textColorHint="@color/hintTextColor"
-                android:layout_below="@+id/edt_name_family"/>
+                <EditText
+                    android:id="@+id/edt_first_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="40dp"
+                    android:background="@drawable/edt_search_style"
+                    android:hint="@string/text_hint_first_name"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/hintTextColor"/>
 
-            <RadioGroup
-                android:id="@+id/rg_gender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layoutDirection="rtl"
-                android:gravity="center"
-                android:layout_below="@+id/edt_father_name"
-                android:layout_marginTop="10dp">
+                <EditText
+                    android:id="@+id/edt_last_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="40dp"
+                    android:background="@drawable/edt_search_style"
+                    android:hint="@string/text_hint_name_family"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/hintTextColor"
+                    android:layout_below="@+id/edt_first_name"/>
+
+                <EditText
+                    android:id="@+id/edt_father_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="40dp"
+                    android:background="@drawable/edt_search_style"
+                    android:hint="@string/text_hint_father_name"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/hintTextColor"
+                    android:layout_below="@+id/edt_last_name"/>
+
+                <RadioGroup
+                    android:id="@+id/rg_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layoutDirection="rtl"
+                    android:gravity="center"
+                    android:layout_below="@+id/edt_father_name"
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="جنسیت : "/>
+                    <RadioButton
+                        android:id="@+id/rb_male"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="آقا"
+                        android:layout_marginStart="15dp"/>
+                    <RadioButton
+                        android:id="@+id/rb_female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="خانم"
+                        android:layout_marginStart="15dp"/>
+
+                </RadioGroup>
+
                 <TextView
+                    android:id="@+id/txt_choose_date_of_death"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/rg_gender"
+                    android:layout_centerHorizontal="true"
+                    android:text="   سال فوت"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="?android:selectableItemBackground"
+                    android:drawableEnd="@drawable/event"
+                    android:gravity="right|center"/>
+
+                <com.shawnlin.numberpicker.NumberPicker
+                    android:id="@+id/number_picker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="جنسیت : "/>
-                <RadioButton
-                    android:id="@+id/rb_male"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="آقا"
-                    android:layout_marginStart="15dp"/>
-                <RadioButton
-                    android:id="@+id/rb_female"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="خانم"
-                    android:layout_marginStart="15dp"/>
+                    android:layout_centerHorizontal="true"
+                    app:np_width="180dp"
+                    app:np_height="64dp"
+                    app:np_dividerColor="#eeeeee"
+                    app:np_selectedTextColor="@color/colorPrimaryDark"
+                    app:np_selectedTextSize="16sp"
+                    app:np_textColor="@color/colorPrimary"
+                    app:np_textSize="13sp"
+                    app:np_orientation="horizontal"
+                    android:layout_below="@+id/txt_choose_date_of_death" />
 
-            </RadioGroup>
+                <Button
+                    android:id="@+id/btn_search"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/number_picker"
+                    android:layout_centerHorizontal="true"
+                    android:text="جستجو کن"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:drawableEnd="@drawable/loupe"/>
 
-            <Button
-                android:id="@+id/btn_choose_date_of_death"
-                android:layout_width="150dp"
-                android:layout_height="50dp"
-                android:layout_below="@+id/rg_gender"
-                android:layout_centerHorizontal="true"
-                android:text="زمان فوت"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="?android:selectableItemBackground"
-                android:drawableEnd="@drawable/event"/>
+            </RelativeLayout>
 
-            <Button
-                android:id="@+id/btn_search"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:layout_below="@+id/btn_choose_date_of_death"
-                android:layout_centerHorizontal="true"
-                android:text="جستجو کن"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:drawableEnd="@drawable/loupe"/>
+        </ScrollView>
 
-        </RelativeLayout>
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.RecyclerView
