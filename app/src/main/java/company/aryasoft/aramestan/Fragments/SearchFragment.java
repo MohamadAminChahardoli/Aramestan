@@ -16,6 +16,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.shawnlin.numberpicker.NumberPicker;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -44,6 +45,7 @@ public class SearchFragment extends Fragment
     private RadioButton RBFeMeal;
     private RecyclerView RecyclerViewSearchResult;
     private NumberPicker NumberPickerDeadYear;
+    private AVLoadingIndicatorView AVLoading;
     private DeceasedApis Api;
     private Call<List<Deceased>> SearchCall;
     private int DefaultSkipItems = 0;
@@ -91,6 +93,8 @@ public class SearchFragment extends Fragment
             DataEnded = true;
             IsLoading = false;
         }
+
+        hideLoading();
      
     }
 
@@ -109,6 +113,7 @@ public class SearchFragment extends Fragment
         RBMeal = view.findViewById(R.id.rb_male);
         RBFeMeal = view.findViewById(R.id.rb_female);
         NumberPickerDeadYear = view.findViewById(R.id.number_picker);
+        AVLoading = view.findViewById(R.id.av_loading);
         ButtonSearch.setOnClickListener(this);
         setupSearchResultRecyclerView();
         setupNumberPicker();
@@ -123,6 +128,7 @@ public class SearchFragment extends Fragment
     {
         SearchCall = Api.lookForDeceased(getSearchModel(), DefaultSkipItems, DefaultTakeItems);
         SearchCall.enqueue(new SearchCallBackImpl(this));
+        showLoading();
     }
 
     private SearchModel getSearchModel()
@@ -179,6 +185,16 @@ public class SearchFragment extends Fragment
         NumberPickerDeadYear.setScrollerEnabled(true);
         NumberPickerDeadYear.setWrapSelectorWheel(true);
         NumberPickerDeadYear.setOnValueChangedListener(this);
+    }
+
+    private void showLoading()
+    {
+        AVLoading.show();
+    }
+
+    private void hideLoading()
+    {
+        AVLoading.hide();
     }
 
 

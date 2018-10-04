@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -39,6 +41,7 @@ public class AdvertisementFragment extends Fragment
     private RecyclerView recyclerAdvertisement;
     private AdvertisementRecyclerAdapter advertisementAdapter;
     private ViewPager sliderPager;
+    private AVLoadingIndicatorView AVLoadingSlider;
     private static int currentPage = 0;
     private DeceasedApis Api;
     private Call<List<SliderDataModel>> SliderCall;
@@ -76,21 +79,22 @@ public class AdvertisementFragment extends Fragment
         ArrayList<SliderDataModel> slides = new ArrayList<>
                 (response.body() == null ? new ArrayList<SliderDataModel>() : response.body());
         setupSlider(slides);
+        hideLoading();
     }
 
     private void initializeComponents(final View view)
     {
         recyclerAdvertisement = view.findViewById(R.id.recycler_advertisement_fragment);
         sliderPager = view.findViewById(R.id.slider_pager);
+        AVLoadingSlider = view.findViewById(R.id.av_loading_slider);
         advertisementAdapter=new AdvertisementRecyclerAdapter(view.getContext());
         recyclerAdvertisement.setAdapter(advertisementAdapter);
-        
-
     }
 
     private void initializeComponentsEvents()
     {
         SliderCall.enqueue(new SliderCallBackImpl(this));
+        showLoading();
     }
     
     private void setupSlider(final ArrayList<SliderDataModel> slides)
@@ -121,5 +125,14 @@ public class AdvertisementFragment extends Fragment
 
     }
 
+    private void showLoading()
+    {
+        AVLoadingSlider.show();
+    }
+
+    private void hideLoading()
+    {
+        AVLoadingSlider.hide();
+    }
 
 }

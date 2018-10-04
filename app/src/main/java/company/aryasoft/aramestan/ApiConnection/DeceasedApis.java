@@ -10,11 +10,12 @@ import company.aryasoft.aramestan.Models.SliderDataModel;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface DeceasedApis {
 
-    @GET("api/GraveyardApi/SearchDeceased")
+    @POST("api/GraveyardApi/SearchDeceased")
     Call<List<Deceased>> lookForDeceased(@Body SearchModel searchModel, @Query("skipNumber") int skipItems,@Query("takeNumber") int takeItems);
 
     @GET("api/GraveyardApi/GetDeceasedDetail")
