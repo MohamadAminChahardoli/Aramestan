@@ -11,8 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
@@ -43,6 +45,9 @@ public class NotifiesFragment extends Fragment
     private boolean IsLoading=false;
     private boolean DataEnded=false;
     private AVLoadingIndicatorView AVLoadingAnnouncement;
+    private ImageView ImgBg;
+    private ImageView ImgToolbar;
+    private ImageView ImgBgEffect;
 
     public NotifiesFragment()
     {
@@ -68,6 +73,9 @@ public class NotifiesFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         initializeComponents(view);
         initializeComponentsEvents();
+        Glide.with(getContext()).load(R.drawable.bg1).into(ImgBg);
+        Glide.with(getContext()).load(R.drawable.about_cloud).into(ImgToolbar);
+        Glide.with(getContext()).load(R.drawable.mydetail).into(ImgBgEffect);
     }
 
     @Override
@@ -90,8 +98,10 @@ public class NotifiesFragment extends Fragment
     private void initializeComponents(View view)
     {
         recyclerNotifies = view.findViewById(R.id.recycler_notifies_activity);
-        relDataBehaviour = view.findViewById(R.id.rel_data_behaviour);
         AVLoadingAnnouncement = view.findViewById(R.id.av_loading_announcement);
+        ImgBg = view.findViewById(R.id.img_bg_notify);
+        ImgToolbar = view.findViewById(R.id.img_toolbar_notify);
+        ImgBgEffect = view.findViewById(R.id.img_bg_effect_notify);
         setupRecyclerViewNotifies();
     }
 

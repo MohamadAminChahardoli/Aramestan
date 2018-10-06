@@ -4,16 +4,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/search_panel"
+    <ImageView
+        android:id="@+id/img_bg"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:id="@+id/img_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="50dp"/>
+
+    <TextView
+        android:id="@+id/txt_app_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="3dp">
+        android:text="      آرامستان      "
+        android:textSize="50sp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@+id/img_toolbar"
+        android:layout_alignBottom="@+id/img_toolbar"
+        android:gravity="bottom"/>
+
+
+
+    <ViewFlipper
+        android:id="@+id/view_flipper_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/img_toolbar">
 
         <RelativeLayout
+            android:id="@+id/search_panel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_bg_style">
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -73,9 +100,13 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/edt_father_name"
                         android:layout_marginTop="10dp"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginEnd="40dp"
                         android:gravity="center"
                         android:layoutDirection="rtl"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:background="@drawable/rg_gender_bg"
+                        android:padding="5dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -99,44 +130,66 @@
 
                     </RadioGroup>
 
-                    <TextView
-                        android:id="@+id/txt_choose_date_of_death"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:layout_below="@+id/rg_gender"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="?android:selectableItemBackground"
-                        android:drawableEnd="@drawable/event"
-                        android:gravity="right|center"
-                        android:text="   سال فوت" />
-
-                    <com.shawnlin.numberpicker.NumberPicker
-                        android:id="@+id/number_picker"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:id="@+id/rel_year_panel"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/txt_choose_date_of_death"
-                        android:layout_centerHorizontal="true"
-                        app:np_dividerColor="#eeeeee"
-                        app:np_height="64dp"
-                        app:np_orientation="horizontal"
-                        app:np_selectedTextColor="@color/colorPrimaryDark"
-                        app:np_selectedTextSize="16sp"
-                        app:np_textColor="@color/colorPrimary"
-                        app:np_textSize="13sp"
-                        app:np_width="180dp" />
+                        android:layout_below="@+id/rg_gender"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginEnd="40dp"
+                        android:background="@drawable/rg_gender_bg">
+
+                        <TextView
+                            android:id="@+id/txt_choose_date_of_death"
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginBottom="10dp"
+                            android:background="?android:selectableItemBackground"
+                            android:drawableEnd="@drawable/event"
+                            android:gravity="end|center"
+                            android:text="   سال فوت"
+                            android:layout_marginEnd="10dp"/>
+
+                        <com.shawnlin.numberpicker.NumberPicker
+                            android:id="@+id/number_picker"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/txt_choose_date_of_death"
+                            android:layout_centerHorizontal="true"
+                            app:np_dividerColor="#eeeeee"
+                            app:np_height="64dp"
+                            app:np_orientation="horizontal"
+                            app:np_selectedTextColor="@color/colorPrimaryDark"
+                            app:np_selectedTextSize="16sp"
+                            app:np_textColor="@color/colorPrimary"
+                            app:np_textSize="13sp"
+                            app:np_width="180dp" />
+
+                        <CheckBox
+                            android:id="@+id/chk_unknown_dead_year"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="سال فوت را نمیدانم"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/number_picker"
+                            android:layout_margin="10dp"
+                            android:layoutDirection="rtl"/>
+
+                    </RelativeLayout>
 
                     <Button
                         android:id="@+id/btn_search"
-                        android:layout_width="200dp"
+                        android:layout_width="150dp"
                         android:layout_height="50dp"
-                        android:layout_below="@+id/number_picker"
+                        android:layout_below="@+id/rel_year_panel"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:drawableEnd="@drawable/loupe"
-                        android:text="جستجو کن" />
+                        android:drawableEnd="@drawable/ic_search_gray_24dp"
+                        android:text="@string/search"
+                        android:textColor="#757575"/>
 
                 </RelativeLayout>
 
@@ -154,13 +207,46 @@
 
         </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
+        <RelativeLayout
+            android:id="@+id/result_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/search_panel"
+            android:background="#fff">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_search_result"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/search_panel" />
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_search_summery"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="20dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="10dp">
+
+                <TextView
+                    android:id="@+id/txt_search_summery"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="#757575"
+                    android:textSize="14sp"
+                    android:text="خلاصه ای از جستجوی کاربر"
+                    android:drawableLeft="@drawable/ic_youtube_searched_for_black_24dp"
+                    android:layout_marginStart="10dp"/>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_search_result"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/card_search_summery"
+                android:layout_marginTop="0dp"/>
+
+        </RelativeLayout>
+
+    </ViewFlipper>
 
 
 </RelativeLayout>

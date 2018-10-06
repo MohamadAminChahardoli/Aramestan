@@ -9,12 +9,14 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,9 +34,9 @@ import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class DetailActivity extends AppCompatActivity
-        implements Button.OnClickListener, DetailsCallBackImpl.OnDetailsReceivedListener, LocationListener {
+        implements View.OnClickListener, DetailsCallBackImpl.OnDetailsReceivedListener, LocationListener {
 
-    private Button ButtonShowLocation;
+    private FloatingActionButton ButtonShowLocation;
     private Criteria criteria;
     private LocationManager locationManager;
     private String Provider;
@@ -54,6 +56,9 @@ public class DetailActivity extends AppCompatActivity
     private TextView TxtRowNumber;
     private TextView TxtGraveNumber;
     private AVLoadingIndicatorView AVLoading;
+    private ImageView ImgBg;
+    private ImageView ImgToolbar;
+    private ImageView ImgBgEffect;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -74,6 +79,9 @@ public class DetailActivity extends AppCompatActivity
         initializeViews();
         Deceased = getIntent().getBundleExtra("selected_deceased");
         getDeceasedDetails();
+        Glide.with(this).load(R.drawable.bg1).into(ImgBg);
+        Glide.with(this).load(R.drawable.about_cloud).into(ImgToolbar);
+        Glide.with(this).load(R.drawable.mydetail).into(ImgBgEffect);
     }
 
     @Override
@@ -135,6 +143,9 @@ public class DetailActivity extends AppCompatActivity
         TxtRowNumber = findViewById(R.id.txt_row_number);
         TxtGraveNumber = findViewById(R.id.txt_grave_number);
         AVLoading = findViewById(R.id.av_loading_search_detail);
+        ImgBg = findViewById(R.id.img_bg_search_detail);
+        ImgToolbar= findViewById(R.id.img_toolbar_search_detail);
+        ImgBgEffect= findViewById(R.id.img_bg_effect_search_detail);
     }
 
     public void setPermissionVerifiedListener(onPermissionVerifiedListener permissionVerifiedListener)

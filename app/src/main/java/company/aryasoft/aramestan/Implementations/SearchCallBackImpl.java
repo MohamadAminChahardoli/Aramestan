@@ -16,7 +16,8 @@ public class SearchCallBackImpl implements Callback<List<Deceased>> {
     }
 
     @Override
-    public void onResponse(Call<List<Deceased>> call, Response<List<Deceased>> response) {
+    public void onResponse(Call<List<Deceased>> call, Response<List<Deceased>> response)
+    {
         SearchResultListener.onReceived(response);
     }
 

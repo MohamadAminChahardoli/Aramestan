@@ -6,9 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".Activities.DetailActivity">
 
+    <ImageView
+        android:id="@+id/img_bg_search_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+         />
+
+    <ImageView
+        android:id="@+id/img_toolbar_search_detail"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="30dp" />
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
+        android:background="#fff"/>
+
+    <ImageView
+        android:id="@+id/img_bg_effect_search_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:layout_below="@+id/img_toolbar_search_detail"
+        android:src="@drawable/mydetail"/>
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -17,8 +48,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_deceased_photo_detail"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:src="@drawable/no_img"
                 app:civ_border_width="0dp"
                 app:civ_border_color="#FF000000"
@@ -122,17 +153,24 @@
                     android:textSize="16sp"
                     android:layout_marginTop="5dp"/>
 
-                <Button
+
+                <android.support.design.widget.FloatingActionButton
                     android:id="@+id/btn_show_location"
-                    android:layout_width="200dp"
-                    android:layout_height="50dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_below="@+id/txt_grave_number"
                     android:layout_centerHorizontal="true"
-                    android:text="نمایش محل دفن روی نقشه"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="5dp"
-                    android:drawableEnd="@drawable/route"
-                    android:enabled="false"/>
+                    android:layout_margin="5dp"
+                    android:src="@drawable/route"
+                    app:fabSize="normal"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/show_grave_location_on_map"
+                    android:layout_below="@+id/btn_show_location"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="14sp"/>
 
             </RelativeLayout>
 

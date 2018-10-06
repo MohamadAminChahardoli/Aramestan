@@ -5,7 +5,7 @@ public class SearchModel {
     private String FirstName;
     private String LastName;
     private String FatherName;
-    private int DeadYear;
+    private String DeadYear;
     private boolean Sex;
 
 
@@ -24,7 +24,7 @@ public class SearchModel {
         return FatherName;
     }
 
-    public int getDeadDate() {
+    public String getDeadDate() {
         return DeadYear;
     }
 
@@ -44,7 +44,7 @@ public class SearchModel {
         FatherName = fatherName;
     }
 
-    public void setDeadDate(int deadYear) {
+    public void setDeadDate(String deadYear) {
         DeadYear = deadYear;
     }
 

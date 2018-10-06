@@ -79,6 +79,12 @@ public class DeceasedAdapter extends RecyclerView.Adapter<DeceasedAdapter.Deceas
         this.notifyDataSetChanged();
     }
 
+    public void clearAllItems()
+    {
+        DeceasedList.clear();
+        this.notifyDataSetChanged();
+    }
+
     public class DeceasedViewHolder extends RecyclerView.ViewHolder {
         public CircleImageView ImageDeceasedPhoto;
         public TextView TextTitleFullName;
