@@ -22,9 +22,10 @@
         android:id="@+id/btn_close_notifies_dialog"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_gravity="bottom|right"
-        android:background="#33000000"
+        android:layout_gravity="center|bottom"
+        android:background="@drawable/btn_close_dialog_style"
         android:clickable="true"
         android:focusable="true"
-        app:srcCompat="@drawable/ic_close_notifies_dialog"/>
+        app:srcCompat="@drawable/ic_close_notifies_dialog"
+        android:layout_marginBottom="10dp"/>
 </FrameLayout>

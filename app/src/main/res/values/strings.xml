@@ -10,4 +10,12 @@
     <string name="no_notify_text">در سیستم اعلانی یافت نشد !</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="ImageFolderName">http://test.aryasoft.org/Images/</string>
+    <string name="AdImageFolder">AdImage/</string>
+    <string name="AnnouncementImageFolder">AnnouncementImage/</string>
+    <string name="DeadImageFolder">DeadImage/</string>
+    <string name="NewsImageFolder">NewsImage/</string>
+    <string name="PersonImageFolder">PersonImage/</string>
+    <string name="SliderImageFolder">SliderImage/</string>
+    <string name="meal">آقا</string>
+    <string name="femeal">خانم</string>
 </resources>

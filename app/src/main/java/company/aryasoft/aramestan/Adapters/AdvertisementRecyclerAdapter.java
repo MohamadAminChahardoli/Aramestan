@@ -4,71 +4,62 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-import company.aryasoft.aramestan.Models.Announcement;
+import company.aryasoft.aramestan.Models.Advertisement;
 import company.aryasoft.aramestan.R;
 
-public class AdvertisementRecyclerAdapter extends RecyclerView.Adapter<AdvertisementRecyclerAdapter.NotifiesRecyclerAdapterViewHolder>
-{
-    private ArrayList<Announcement> notifiesDataList;
+public class AdvertisementRecyclerAdapter extends RecyclerView.Adapter<AdvertisementRecyclerAdapter.AdvertisementRecyclerViewHolder> {
+    private ArrayList<Advertisement> Advertisements;
     private Context context;
 
-    public AdvertisementRecyclerAdapter(Context context)
-    {
-        this.notifiesDataList = new ArrayList<>();
-        this.context=context;
+    public AdvertisementRecyclerAdapter(Context context) {
+        this.Advertisements = new ArrayList<>();
+        this.context = context;
     }
 
     @NonNull
     @Override
-    public NotifiesRecyclerAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i)
-    {
+    public AdvertisementRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View RecyclerItemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.advertisement_view_item, viewGroup, false);
-        return new NotifiesRecyclerAdapterViewHolder(RecyclerItemView);
+        return new AdvertisementRecyclerViewHolder(RecyclerItemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NotifiesRecyclerAdapterViewHolder holder, int position)
+    public void onBindViewHolder(@NonNull AdvertisementRecyclerViewHolder holder, int position)
     {
-        Glide.with(context).load("URL"+notifiesDataList.get(position).ImageName).into(holder.imgNotifies);
-        holder.imgNotifies.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                //open dialog for biggerImage
-            }
-        });
+        final String imageUrl = context.getString(R.string.ImageFolderName) + context.getString(R.string.AdImageFolder) + Advertisements.get(position).getImageName();
+        Glide.with(context).load(imageUrl).into(holder.imgAdvertisements);
+        holder.txtAdDescription.setText(Html.fromHtml( Advertisements.get(position).getDescription()).toString());
     }
 
     @Override
-    public int getItemCount()
-    {
-       return notifiesDataList.size();
+    public int getItemCount() {
+        return Advertisements.size();
     }
 
-    public void addNotifiesDataList(ArrayList<Announcement> notifiesDataList)
-    {
-        this.notifiesDataList.addAll(notifiesDataList);
+    public void addAdvertisementsDataList(ArrayList<Advertisement> advertisements) {
+        this.Advertisements.addAll(advertisements);
         this.notifyDataSetChanged();
     }
 
-    class NotifiesRecyclerAdapterViewHolder extends ViewHolder
-    {
-        private ImageView imgNotifies;
+    class AdvertisementRecyclerViewHolder extends ViewHolder {
+        private ImageView imgAdvertisements;
+        private TextView txtAdDescription;
 
-        NotifiesRecyclerAdapterViewHolder(@NonNull View itemView)
-        {
+        AdvertisementRecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgNotifies=itemView.findViewById(R.id.img_notifies);
+            imgAdvertisements = itemView.findViewById(R.id.img_ad);
+            txtAdDescription=itemView.findViewById(R.id.txt_ad_description);
         }
     }
 }

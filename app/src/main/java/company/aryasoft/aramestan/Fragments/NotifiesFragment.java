@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,7 @@ public class NotifiesFragment extends Fragment
     private int DefaultTakeItems = 20;
     private boolean IsLoading=false;
     private boolean DataEnded=false;
+    private AVLoadingIndicatorView AVLoadingAnnouncement;
 
     public NotifiesFragment()
     {
@@ -81,12 +84,14 @@ public class NotifiesFragment extends Fragment
             DataEnded = true;
             IsLoading = false;
         }
+        hideLoading();
     }
 
     private void initializeComponents(View view)
     {
         recyclerNotifies = view.findViewById(R.id.recycler_notifies_activity);
         relDataBehaviour = view.findViewById(R.id.rel_data_behaviour);
+        AVLoadingAnnouncement = view.findViewById(R.id.av_loading_announcement);
         setupRecyclerViewNotifies();
     }
 
@@ -125,11 +130,23 @@ public class NotifiesFragment extends Fragment
     {
         AnnouncementCall = Api.getAnnouncements(DefaultSkipItems, DefaultTakeItems);
         AnnouncementCall.enqueue(new AnnouncementCallBackImpl(this));
+        showLoading();
     }
 
     private void initializeComponentsEvents()
     {
         AnnouncementCall.enqueue(new AnnouncementCallBackImpl(this));
+        showLoading();
+    }
+
+    private void showLoading()
+    {
+        AVLoadingAnnouncement.show();
+    }
+
+    private void hideLoading()
+    {
+        AVLoadingAnnouncement.hide();
     }
 
 }

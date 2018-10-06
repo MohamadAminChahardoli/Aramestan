@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F3F3F3"
-    android:orientation="vertical">
+    android:background="#fff">
+
 
 
     <android.support.v7.widget.RecyclerView
@@ -17,6 +17,16 @@
         app:layoutManager="android.support.v7.widget.GridLayoutManager"
         tools:listitem="@layout/notifies_recycler_view_item"
         tools:spanCount="2"/>
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/av_loading_announcement"
+        style="@style/AVLoadingIndicatorView.Large"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:visibility="visible"
+        app:indicatorColor="#9E9E9E"
+        app:indicatorName="BallScaleMultipleIndicator"
+        android:layout_centerInParent="true"/>
 
     <RelativeLayout
         android:id="@+id/rel_data_behaviour"
@@ -43,4 +53,4 @@
             android:textStyle="bold"/>
 
     </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

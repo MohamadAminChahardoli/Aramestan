@@ -131,12 +131,23 @@
                     android:text="نمایش محل دفن روی نقشه"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="5dp"
-                    android:drawableEnd="@drawable/route"/>
+                    android:drawableEnd="@drawable/route"
+                    android:enabled="false"/>
 
             </RelativeLayout>
 
         </RelativeLayout>
 
     </ScrollView>
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/av_loading_search_detail"
+        style="@style/AVLoadingIndicatorView.Large"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:visibility="gone"
+        app:indicatorColor="#9E9E9E"
+        app:indicatorName="BallScaleMultipleIndicator"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>

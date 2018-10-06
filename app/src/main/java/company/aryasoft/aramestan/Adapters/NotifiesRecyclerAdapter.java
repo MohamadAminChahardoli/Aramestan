@@ -42,13 +42,16 @@ public class NotifiesRecyclerAdapter extends RecyclerView.Adapter<NotifiesRecycl
     @Override
     public void onBindViewHolder(@NonNull final NotifiesRecyclerAdapterViewHolder holder, int position)
     {
-        Glide.with(context).load(context.getString(R.string.ImageFolderName) + notifiesDataList.get(position).ImageName).into(holder.imgNotifies);
+        final String imageUrl = context.getString(R.string.ImageFolderName) +
+                context.getString(R.string.AnnouncementImageFolder) +
+                notifiesDataList.get(position).ImageName;
+        Glide.with(context).load(imageUrl).into(holder.imgNotifies);
         holder.imgNotifies.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                ShowNotifyImageDialog(context.getString(R.string.ImageFolderName) + notifiesDataList.get(holder.getAdapterPosition()).ImageName);
+                ShowNotifyImageDialog(imageUrl);
             }
         });
     }
@@ -82,7 +85,7 @@ public class NotifiesRecyclerAdapter extends RecyclerView.Adapter<NotifiesRecycl
                 dlg.dismiss();
             }
         });
-        Glide.with(context).load(R.drawable.no_img).into(imgNotifiesDialog);
+        Glide.with(context).load(ImageName).into(imgNotifiesDialog);
         dlg.setContentView(AlertView);
         dlg.getWindow().getAttributes().windowAnimations = R.style.NotifiesImageDialogAnimation;
         dlg.show();

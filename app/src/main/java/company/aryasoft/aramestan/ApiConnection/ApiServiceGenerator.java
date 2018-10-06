@@ -39,7 +39,7 @@ public class ApiServiceGenerator {
         }
         if (GsonInstance == null)
         {
-            GsonInstance = new GsonBuilder().setLenient().create();
+            GsonInstance = new GsonBuilder().setLenient().serializeNulls().create();
         }
         if (RetrofitInstance == null)
         {

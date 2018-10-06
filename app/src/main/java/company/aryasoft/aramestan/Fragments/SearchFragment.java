@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +17,10 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.shawnlin.numberpicker.NumberPicker;
 import com.wang.avi.AVLoadingIndicatorView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import company.aryasoft.aramestan.Adapters.DeceasedAdapter;
@@ -32,6 +33,7 @@ import company.aryasoft.aramestan.Models.SearchModel;
 import company.aryasoft.aramestan.R;
 import retrofit2.Call;
 import retrofit2.Response;
+import android.text.TextUtils;
 
 public class SearchFragment extends Fragment
         implements Button.OnClickListener, SearchCallBackImpl.OnResultReceived, NumberPicker.OnValueChangeListener {
@@ -45,14 +47,15 @@ public class SearchFragment extends Fragment
     private RadioButton RBFeMeal;
     private RecyclerView RecyclerViewSearchResult;
     private NumberPicker NumberPickerDeadYear;
-    private AVLoadingIndicatorView AVLoading;
+    private AVLoadingIndicatorView AVLoadingSearch;
     private DeceasedApis Api;
     private Call<List<Deceased>> SearchCall;
     private int DefaultSkipItems = 0;
     private int DefaultTakeItems = 20;
     private boolean IsLoading=false;
     private boolean DataEnded=false;
-    private int YearOfDead = 0;
+    private Integer YearOfDead = null;
+    private int DifferenceBetweenDateOfADAndDateOfShem = 621;
 
 
     @Override
@@ -78,11 +81,13 @@ public class SearchFragment extends Fragment
     {
         initializeViews(view);
         initializeComponentsEvents();
+        Toast.makeText(getContext(), YearOfDead+"", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onReceived(Response<List<Deceased>> response)
     {
+        Toast.makeText(getContext(), response.body().size()+"", Toast.LENGTH_SHORT).show();
         if (response.body().size() > 0)
         {
             deceasedAdapter.addDeceasedListData(response.body());
@@ -113,7 +118,7 @@ public class SearchFragment extends Fragment
         RBMeal = view.findViewById(R.id.rb_male);
         RBFeMeal = view.findViewById(R.id.rb_female);
         NumberPickerDeadYear = view.findViewById(R.id.number_picker);
-        AVLoading = view.findViewById(R.id.av_loading);
+        AVLoadingSearch = view.findViewById(R.id.av_loading_search);
         ButtonSearch.setOnClickListener(this);
         setupSearchResultRecyclerView();
         setupNumberPicker();
@@ -131,14 +136,38 @@ public class SearchFragment extends Fragment
         showLoading();
     }
 
-    private SearchModel getSearchModel()
-    {
+    private SearchModel getSearchModel() {
         SearchModel searchModel = new SearchModel();
-        searchModel.setFirstName(EdtFirstName.getText().toString());
-        searchModel.setLastName(EdtLastName.getText().toString());
-        searchModel.setFatherName(EdtFatherName.getText().toString());
-        searchModel.setDeadDate(YearOfDead);
+
+        if (!TextUtils.isEmpty(EdtFirstName.getText())) {
+            searchModel.setFirstName(EdtFirstName.getText().toString());
+        }
+        else
+        {
+            searchModel.setFirstName(null);
+        }
+        if ( ! TextUtils.isEmpty(EdtLastName.getText()))
+        {
+            searchModel.setFirstName(EdtLastName.getText().toString());
+        }
+        else
+        {
+            searchModel.setLastName(null);
+        }
+        if ( ! TextUtils.isEmpty(EdtFatherName.getText()))
+        {
+            searchModel.setFatherName(EdtFatherName.getText().toString());
+        }
+        else
+        {
+            searchModel.setFatherName(null);
+        }
+        if (YearOfDead != null)
+        {
+            searchModel.setDeadDate(YearOfDead + DifferenceBetweenDateOfADAndDateOfShem);
+        }
         searchModel.setSex(RBMeal.isChecked());
+        Log.i("mymodel",new Gson().toJson(searchModel));
         return searchModel;
     }
 
@@ -178,8 +207,7 @@ public class SearchFragment extends Fragment
     {
         NumberPickerDeadYear.setMinValue(1350);
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        int differenceBetweenDateOfADAndDateOfShem = 621;
-        NumberPickerDeadYear.setMaxValue(currentYear - differenceBetweenDateOfADAndDateOfShem);
+        NumberPickerDeadYear.setMaxValue(currentYear - DifferenceBetweenDateOfADAndDateOfShem);
         NumberPickerDeadYear.setValue(1380);
         NumberPickerDeadYear.setFadingEdgeEnabled(true);
         NumberPickerDeadYear.setScrollerEnabled(true);
@@ -189,13 +217,12 @@ public class SearchFragment extends Fragment
 
     private void showLoading()
     {
-        AVLoading.show();
+        AVLoadingSearch.show();
     }
 
     private void hideLoading()
     {
-        AVLoading.hide();
+        AVLoadingSearch.hide();
     }
-
 
 }

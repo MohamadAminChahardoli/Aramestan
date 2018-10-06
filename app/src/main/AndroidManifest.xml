@@ -4,7 +4,9 @@
     package="company.aryasoft.aramestan">
 
     <uses-sdk tools:overrideLibrary="co.ronash.pushe" />
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <permission
         android:name="company.aryasoft.aramestan.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -15,8 +17,7 @@
     <!-- Optional permissions -->
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".App.MyApplication"
@@ -33,10 +34,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Activities.DetailActivity">
-
-        </activity>
+        <activity android:name=".Activities.DetailActivity"></activity>
 
         <receiver android:name="co.ronash.pushe.receiver.UpdateReceiver">
             <intent-filter>
@@ -66,6 +64,7 @@
             android:name="co.ronash.pushe.cr"
             android:value="Tm9uZQ==" />
 
+        <activity android:name=".Activities.NewsDetailsActivity"></activity>
     </application>
 
 </manifest>
