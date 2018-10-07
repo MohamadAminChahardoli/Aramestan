@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +14,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
+import com.bumptech.glide.Glide;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
@@ -21,6 +26,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import company.aryasoft.aramestan.Activities.DetailActivity;
 import company.aryasoft.aramestan.Adapters.AdvertisementRecyclerAdapter;
 import company.aryasoft.aramestan.Adapters.NewsRecyclerAdapter;
 import company.aryasoft.aramestan.Adapters.NotifySliderAdapter;
@@ -33,6 +39,7 @@ import company.aryasoft.aramestan.Models.Advertisement;
 import company.aryasoft.aramestan.Models.NewsModel;
 import company.aryasoft.aramestan.Models.SliderDataModel;
 import company.aryasoft.aramestan.R;
+import company.aryasoft.aramestan.Utils.Networking;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -49,6 +56,11 @@ public class AdvertisementFragment extends Fragment
     private NewsRecyclerAdapter newsAdapter;
     private ViewPager sliderPager;
     private AVLoadingIndicatorView AVLoadingSlider;
+    private ImageView ImgBg;
+    private ImageView ImgToolbar;
+    private ImageView ImgFooter;
+    private RelativeLayout RelContent;
+    private ScrollView ScrollAds;
     private static int currentPage = 0;
     private DeceasedApis Api;
     private Call<List<SliderDataModel>> SliderCall;
@@ -63,6 +75,7 @@ public class AdvertisementFragment extends Fragment
     private int AdvertisementDefaultTakeItems = 10;
     private boolean AdvertisementIsLoading=false;
     private boolean AdvertisementDataEnded=false;
+    private Snackbar SnackMessage;
 
     public AdvertisementFragment()
     {
@@ -88,6 +101,9 @@ public class AdvertisementFragment extends Fragment
         context=view.getContext();
         initializeComponents(view);
         initializeComponentsEvents();
+        Glide.with(getContext()).load(R.drawable.bg1).into(ImgBg);
+        Glide.with(getContext()).load(R.drawable.about_cloud_rotat).into(ImgToolbar);
+        Glide.with(getContext()).load(R.drawable.about_cloud).into(ImgFooter);
     }
 
     @Override
@@ -142,6 +158,11 @@ public class AdvertisementFragment extends Fragment
         sliderPager = view.findViewById(R.id.slider_pager);
         recyclerNews = view.findViewById(R.id.recycler_news);
         AVLoadingSlider = view.findViewById(R.id.av_loading_slider);
+        ImgBg = view.findViewById(R.id.img_bg_ads);
+        ImgToolbar = view.findViewById(R.id.img_toolbar_ads);
+        ImgFooter = view.findViewById(R.id.img_footer_ads);
+        RelContent = view.findViewById(R.id.rel_content_ads_parent);
+        ScrollAds = view.findViewById(R.id.scroll_ads);
         setupNewsRecycler();
         setupAdvertisementsRecycler();
     }
@@ -267,8 +288,24 @@ public class AdvertisementFragment extends Fragment
 
     private void getSlider()
     {
-        SliderCall = Api.getSlider();
-        SliderCall.enqueue(new SliderCallBackImpl(this));
+        if (Networking.isNetworkAvailable(getContext()))
+        {
+            SliderCall = Api.getSlider();
+            SliderCall.enqueue(new SliderCallBackImpl(this));
+            showLoading();
+            if (SnackMessage != null && SnackMessage.isShown())
+            {
+                SnackMessage.dismiss();
+                ScrollAds.setVisibility(View.VISIBLE);
+            }
+        }
+        else
+        {
+            showDisconnectedInternetMessage();
+            ScrollAds.setVisibility(View.INVISIBLE);
+            hideLoading();
+        }
+
     }
 
     private void getNews()
@@ -281,6 +318,26 @@ public class AdvertisementFragment extends Fragment
     {
         AdvertisementsCall = Api.getAdvertisements(NewsDefaultSkipItems, NewsDefaultTakeItems);
         AdvertisementsCall.enqueue(new AdvertisementsCallBackImpl(this));
+    }
+
+    private void showDisconnectedInternetMessage()
+    {
+        SnackMessage = Snackbar.make(RelContent, getString(R.string.no_internet), Snackbar.LENGTH_INDEFINITE);
+        SnackMessage.show();
+        SnackMessage.setAction(getString(R.string.retry), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Networking.isNetworkAvailable(getContext()))
+                {
+                    getSlider();
+                    SnackMessage.dismiss();
+                }
+                else
+                {
+                    showDisconnectedInternetMessage();
+                }
+            }
+        });
     }
 
 }

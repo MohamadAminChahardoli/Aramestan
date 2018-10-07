@@ -3,20 +3,50 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:id="@+id/rel_content_ads_parent">
+
+    <ImageView
+        android:id="@+id/img_bg_ads"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:id="@+id/img_toolbar_ads"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:id="@+id/img_footer_ads"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        android:layout_alignParentBottom="true"/>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/scroll_ads">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/slider_pager"
+            <android.support.v7.widget.CardView
+                android:id="@+id/slider_panel"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"/>
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="0dp"
+                android:elevation="3dp">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/slider_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"/>
+
+            </android.support.v7.widget.CardView>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -26,7 +56,7 @@
                 android:textSize="16sp"
                 android:layout_alignParentEnd="true"
                 android:padding="10dp"
-                android:layout_below="@+id/slider_pager"/>
+                android:layout_below="@+id/slider_panel"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_news"

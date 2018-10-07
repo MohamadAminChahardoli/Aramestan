@@ -8,7 +8,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:orientation="horizontal"
-    app:cardElevation="3dp">
+    app:cardElevation="7dp"
+    app:cardCornerRadius="7dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,10 +17,9 @@
 
         <ImageView
             android:id="@+id/img_ad"
-            android:layout_width="160dp"
+            android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_alignParentRight="true"
-            android:layout_margin="8dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"/>
 

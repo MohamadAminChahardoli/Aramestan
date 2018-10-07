@@ -2,10 +2,13 @@ package company.aryasoft.aramestan.Activities;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -16,6 +19,7 @@ import company.aryasoft.aramestan.ApiConnection.DeceasedApis;
 import company.aryasoft.aramestan.Implementations.NewsDetailCallBackImpl;
 import company.aryasoft.aramestan.Models.NewsDetailModel;
 import company.aryasoft.aramestan.R;
+import company.aryasoft.aramestan.Utils.Networking;
 import retrofit2.Call;
 import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -31,6 +35,8 @@ public class NewsDetailsActivity extends AppCompatActivity implements NewsDetail
     private TextView TxtNewsDescription;
     private TextView TxtNewsSource;
     private AVLoadingIndicatorView AVLoading;
+    private ScrollView ScrollNews;
+    private Snackbar SnackMessage;
 
     @Override
     protected void attachBaseContext(Context newBase)
@@ -63,13 +69,28 @@ public class NewsDetailsActivity extends AppCompatActivity implements NewsDetail
         TxtNewsDescription= findViewById(R.id.txt_news_description);
         TxtNewsSource = findViewById(R.id.txt_news_source);
         AVLoading = findViewById(R.id.av_loading_news_detail);
+        ScrollNews = findViewById(R.id.scroll_news_details);
     }
 
     private void getNewsDetails(int newsId)
     {
-        NewsDetailCall = Api.getNewsDetails(newsId);
-        NewsDetailCall.enqueue(new NewsDetailCallBackImpl(this));
-        showLoading();
+        if (Networking.isNetworkAvailable(NewsDetailsActivity.this))
+        {
+            NewsDetailCall = Api.getNewsDetails(newsId);
+            NewsDetailCall.enqueue(new NewsDetailCallBackImpl(this));
+            showLoading();
+            if (SnackMessage != null && SnackMessage.isShown())
+            {
+                SnackMessage.dismiss();
+                ScrollNews.setVisibility(View.VISIBLE);
+            }
+        }
+        else
+        {
+            showDisconnectedInternetMessage();
+            ScrollNews.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     private void bindViews(NewsDetailModel newsDetailModel)
@@ -79,7 +100,7 @@ public class NewsDetailsActivity extends AppCompatActivity implements NewsDetail
         TxtNewsTitle.setText(News.getString("news_title"));
         TxtNewsSummary.setText(newsDetailModel.getNewsSummery());
         TxtNewsDescription.setText(Html.fromHtml(newsDetailModel.getDescription()).toString());
-        TxtNewsSource.setText(newsDetailModel.getNewsSource());
+        TxtNewsSource.setText(String.format("منبع خبر: %s", newsDetailModel.getNewsSource()));
     }
 
     private void showLoading()
@@ -90,6 +111,26 @@ public class NewsDetailsActivity extends AppCompatActivity implements NewsDetail
     private void hideLoading()
     {
         AVLoading.hide();
+    }
+
+    private void showDisconnectedInternetMessage()
+    {
+        SnackMessage = Snackbar.make(ScrollNews, getString(R.string.no_internet), Snackbar.LENGTH_INDEFINITE);
+        SnackMessage.show();
+        SnackMessage.setAction(getString(R.string.retry), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Networking.isNetworkAvailable(NewsDetailsActivity.this))
+                {
+                    getNewsDetails(News.getInt("news_id"));
+                    SnackMessage.dismiss();
+                }
+                else
+                {
+                    showDisconnectedInternetMessage();
+                }
+            }
+        });
     }
 
 }

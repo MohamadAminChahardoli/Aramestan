@@ -10,13 +10,15 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +30,7 @@ import company.aryasoft.aramestan.ApiConnection.DeceasedApis;
 import company.aryasoft.aramestan.Implementations.DetailsCallBackImpl;
 import company.aryasoft.aramestan.Models.DetailDeceasedApiModel;
 import company.aryasoft.aramestan.R;
+import company.aryasoft.aramestan.Utils.Networking;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -59,6 +62,9 @@ public class DetailActivity extends AppCompatActivity
     private ImageView ImgBg;
     private ImageView ImgToolbar;
     private ImageView ImgBgEffect;
+    private RelativeLayout RelContent;
+    private ScrollView ScrollContent;
+    private Snackbar SnackMessage;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -144,8 +150,9 @@ public class DetailActivity extends AppCompatActivity
         TxtGraveNumber = findViewById(R.id.txt_grave_number);
         AVLoading = findViewById(R.id.av_loading_search_detail);
         ImgBg = findViewById(R.id.img_bg_search_detail);
-        ImgToolbar= findViewById(R.id.img_toolbar_search_detail);
-        ImgBgEffect= findViewById(R.id.img_bg_effect_search_detail);
+        ImgToolbar = findViewById(R.id.img_toolbar_search_detail);
+        ImgBgEffect = findViewById(R.id.img_bg_effect_search_detail);
+        ScrollContent = findViewById(R.id.scroll_detail_content);
     }
 
     public void setPermissionVerifiedListener(onPermissionVerifiedListener permissionVerifiedListener)
@@ -219,17 +226,51 @@ public class DetailActivity extends AppCompatActivity
         AVLoading.hide();
     }
 
+    private void getDeceasedDetails()
+    {
+        if (Networking.isNetworkAvailable(this))
+        {
+            DeceasedApis api = ApiServiceGenerator.getApiService();
+            Call<DetailDeceasedApiModel> detailCall = api.getDeceasedDetails(Deceased.getInt("dead_id"));
+            detailCall.enqueue(new DetailsCallBackImpl(this));
+            showLoading();
+            if (SnackMessage != null && SnackMessage.isShown())
+            {
+                SnackMessage.dismiss();
+                ScrollContent.setVisibility(View.VISIBLE);
+            }
+        }
+        else
+        {
+            showDisconnectedInternetMessage();
+            ScrollContent.setVisibility(View.INVISIBLE);
+        }
+
+    }
+
+    private void showDisconnectedInternetMessage()
+    {
+        SnackMessage = Snackbar.make(ScrollContent, getString(R.string.no_internet), Snackbar.LENGTH_INDEFINITE);
+        SnackMessage.show();
+        SnackMessage.setAction(getString(R.string.retry), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Networking.isNetworkAvailable(DetailActivity.this))
+                {
+                    getDeceasedDetails();
+                    SnackMessage.dismiss();
+                }
+                else
+                {
+                    showDisconnectedInternetMessage();
+                }
+            }
+        });
+    }
+
     public interface onPermissionVerifiedListener
     {
         void onPermissionVerified(Location location);
-    }
-
-    private void getDeceasedDetails()
-    {
-        DeceasedApis api = ApiServiceGenerator.getApiService();
-        Call<DetailDeceasedApiModel> detailCall = api.getDeceasedDetails(Deceased.getInt("dead_id"));
-        detailCall.enqueue(new DetailsCallBackImpl(this));
-        showLoading();
     }
 
 }

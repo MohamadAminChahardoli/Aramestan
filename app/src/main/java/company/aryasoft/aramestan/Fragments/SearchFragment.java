@@ -4,6 +4,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,6 +24,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,8 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.Calendar;
 import java.util.List;
+
+import company.aryasoft.aramestan.Activities.DetailActivity;
 import company.aryasoft.aramestan.Adapters.DeceasedAdapter;
 import company.aryasoft.aramestan.ApiConnection.ApiServiceGenerator;
 import company.aryasoft.aramestan.ApiConnection.DeceasedApis;
@@ -42,8 +46,10 @@ import company.aryasoft.aramestan.Implementations.SearchCallBackImpl;
 import company.aryasoft.aramestan.Models.Deceased;
 import company.aryasoft.aramestan.Models.SearchModel;
 import company.aryasoft.aramestan.R;
+import company.aryasoft.aramestan.Utils.Networking;
 import retrofit2.Call;
 import retrofit2.Response;
+
 import android.text.TextUtils;
 import android.widget.ViewFlipper;
 
@@ -66,14 +72,16 @@ public class SearchFragment extends Fragment
     private TextView TxtSearchSummery;
     private TextView TxtAppTitle;
     private CheckBox ChkUnknownDeadYear;
+    private RelativeLayout RelContent;
     private DeceasedApis Api;
-   // private Call<List<Deceased>> SearchCall;
+    private Call<List<Deceased>> SearchCall;
     private int DefaultSkipItems = 0;
     private final int DefaultTakeItems = 20;
-    private boolean IsLoading=false;
-    private boolean DataEnded=false;
+    private boolean IsLoading = false;
+    private boolean DataEnded = false;
     private String YearOfDead = null;
     private int DifferenceBetweenDateOfADAndDateOfShem = 621;
+    private Snackbar SnackMessage;
 
 
     @Override
@@ -91,36 +99,29 @@ public class SearchFragment extends Fragment
     public void onClick(View view) {
         if (view.getId() == R.id.btn_search) {
             search();
-        }
-        else if (view.getId() == R.id.txt_search_summery)
-        {
+        } else if (view.getId() == R.id.txt_search_summery) {
             deceasedAdapter.clearAllItems();
             Flipper.setDisplayedChild(0);
         }
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState)
-    {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         initializeViews(view);
         initializeComponentsEvents();
-        Toast.makeText(getContext(), YearOfDead+"", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), YearOfDead + "", Toast.LENGTH_SHORT).show();
         Glide.with(getContext()).load(R.drawable.bg1).into(ImgBg);
         Glide.with(getContext()).load(R.drawable.about_cloud).into(ImgToolbar);
         setupFlipper();
     }
 
     @Override
-    public void onReceived(Response<List<Deceased>> response)
-    {
-        //Toast.makeText(getContext(), response.body().size()+"", Toast.LENGTH_SHORT).show();
-        if (response.body().size() > 0)
-        {
+    public void onReceived(Response<List<Deceased>> response) {
+        if (response.body().size() > 0) {
             deceasedAdapter.addDeceasedListData(response.body());
             IsLoading = false;
-        }
-        else
-        {
+            TxtSearchSummery.setText(getSummery());
+        } else {
             DataEnded = true;
             IsLoading = false;
             TxtSearchSummery.setText(getContext().getString(R.string.not_found));
@@ -128,7 +129,7 @@ public class SearchFragment extends Fragment
 
         hideLoading();
         Flipper.setDisplayedChild(1);
-     
+
     }
 
     @Override
@@ -136,8 +137,7 @@ public class SearchFragment extends Fragment
         YearOfDead = newVal + "";
     }
 
-    private void initializeViews(View view)
-    {
+    private void initializeViews(View view) {
         ButtonSearch = view.findViewById(R.id.btn_search);
         RecyclerViewSearchResult = view.findViewById(R.id.recycler_view_search_result);
         EdtFirstName = view.findViewById(R.id.edt_first_name);
@@ -152,19 +152,17 @@ public class SearchFragment extends Fragment
         Flipper = view.findViewById(R.id.view_flipper_search);
         TxtSearchSummery = view.findViewById(R.id.txt_search_summery);
         TxtAppTitle = view.findViewById(R.id.txt_app_title);
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(),  "fonts/iran_nastaliq.ttf");
+        RelContent = view.findViewById(R.id.rel_content_search);
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/iran_nastaliq.ttf");
         TxtAppTitle.setTypeface(tf);
         ChkUnknownDeadYear = view.findViewById(R.id.chk_unknown_dead_year);
         ChkUnknownDeadYear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NumberPickerDeadYear.setEnabled( ! ChkUnknownDeadYear.isChecked());
-                if (ChkUnknownDeadYear.isChecked())
-                {
+                NumberPickerDeadYear.setEnabled(!ChkUnknownDeadYear.isChecked());
+                if (ChkUnknownDeadYear.isChecked()) {
                     YearOfDead = null;
-                }
-                else
-                {
+                } else {
                     YearOfDead = NumberPickerDeadYear.getValue() + "";
                 }
             }
@@ -175,18 +173,23 @@ public class SearchFragment extends Fragment
         setupNumberPicker();
     }
 
-    private void initializeComponentsEvents()
-    {
+    private void initializeComponentsEvents() {
 
     }
 
-    private void search()
-    {
-        //SearchCall = Api.lookForDeceased(getSearchModel(), DefaultSkipItems, DefaultTakeItems);
-        Call<List<Deceased>> SearchCall = Api.lookForDeceased(getSearchModel(), DefaultSkipItems, DefaultTakeItems);
-        Toast.makeText(getContext(), DefaultSkipItems+"", Toast.LENGTH_SHORT).show();
-        SearchCall.enqueue(new SearchCallBackImpl(this));
-        showLoading();
+    private void search() {
+        if (Networking.isNetworkAvailable(getActivity())) {
+            SearchCall = Api.lookForDeceased(getSearchModel(), DefaultSkipItems, DefaultTakeItems);
+            Toast.makeText(getContext(), DefaultSkipItems + "", Toast.LENGTH_SHORT).show();
+            SearchCall.enqueue(new SearchCallBackImpl(this));
+            showLoading();
+            if (SnackMessage != null && SnackMessage.isShown()) {
+                SnackMessage.dismiss();
+            }
+        } else {
+            showDisconnectedInternetMessage();
+        }
+
     }
 
     private SearchModel getSearchModel() {
@@ -194,41 +197,31 @@ public class SearchFragment extends Fragment
 
         if (!TextUtils.isEmpty(EdtFirstName.getText())) {
             searchModel.setFirstName(EdtFirstName.getText().toString());
-        }
-        else
-        {
+        } else {
             searchModel.setFirstName(null);
         }
-        if ( ! TextUtils.isEmpty(EdtLastName.getText()))
-        {
+        if (!TextUtils.isEmpty(EdtLastName.getText())) {
             searchModel.setLastName(EdtLastName.getText().toString());
-        }
-        else
-        {
+        } else {
             searchModel.setLastName(null);
         }
-        if ( ! TextUtils.isEmpty(EdtFatherName.getText()))
-        {
+        if (!TextUtils.isEmpty(EdtFatherName.getText())) {
             searchModel.setFatherName(EdtFatherName.getText().toString());
-        }
-        else
-        {
+        } else {
             searchModel.setFatherName(null);
         }
-        if (YearOfDead != null)
-        {
+        if (YearOfDead != null) {
             int year = Integer.parseInt(YearOfDead);
-            searchModel.setDeadDate((year + DifferenceBetweenDateOfADAndDateOfShem)+"");
+            searchModel.setDeadDate((year + DifferenceBetweenDateOfADAndDateOfShem) + "");
         }
 
         searchModel.setSex(RBMeal.isChecked());
-        Gson  GsonInstance = new GsonBuilder().setLenient().serializeNulls().create();
+        Gson GsonInstance = new GsonBuilder().setLenient().serializeNulls().create();
         Log.i("mymodel", GsonInstance.toJson(searchModel));
         return searchModel;
     }
 
-    private void setupSearchResultRecyclerView()
-    {
+    private void setupSearchResultRecyclerView() {
         deceasedAdapter = new DeceasedAdapter(getContext());
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(MyApplication.getContext());
         RecyclerViewSearchResult.setLayoutManager(mLayoutManager);
@@ -239,22 +232,17 @@ public class SearchFragment extends Fragment
         RecyclerViewSearchResult.addItemDecoration(itemDecorator);
         RecyclerViewSearchResult.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy)
-            {
-                if(deceasedAdapter.getItemCount()>=DefaultTakeItems)
-                {
-                    if(!DataEnded)
-                    {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (deceasedAdapter.getItemCount() >= DefaultTakeItems) {
+                    if (!DataEnded) {
                         int VisibleItemCount = mLayoutManager.getChildCount();
                         int TotalItemCount = mLayoutManager.getItemCount();
                         int PastVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
-                        if (IsLoading)
-                        {
+                        if (IsLoading) {
                             return;
                         }
-                        if ((VisibleItemCount + PastVisibleItem) >= TotalItemCount)
-                        {
-                            DefaultSkipItems+=DefaultTakeItems;
+                        if ((VisibleItemCount + PastVisibleItem) >= TotalItemCount) {
+                            DefaultSkipItems += DefaultTakeItems;
                             IsLoading = true;
                             //search();
                         }
@@ -265,8 +253,7 @@ public class SearchFragment extends Fragment
         });
     }
 
-    private void setupNumberPicker()
-    {
+    private void setupNumberPicker() {
         NumberPickerDeadYear.setMinValue(1350);
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         NumberPickerDeadYear.setMaxValue(currentYear - DifferenceBetweenDateOfADAndDateOfShem);
@@ -277,23 +264,47 @@ public class SearchFragment extends Fragment
         NumberPickerDeadYear.setOnValueChangedListener(this);
     }
 
-    private void showLoading()
-    {
+    private void showLoading() {
         AVLoadingSearch.show();
     }
 
-    private void hideLoading()
-    {
+    private void hideLoading() {
         AVLoadingSearch.hide();
     }
 
-    private void setupFlipper()
-    {
+    private void setupFlipper() {
         Animation inAnim = AnimationUtils.loadAnimation(getContext(), R.anim.flip_in);
         Animation outAnim = AnimationUtils.loadAnimation(getContext(), R.anim.flip_out);
-        //Animation outAnim2 = AnimationUtils.loadAnimation(getContext(), android.R.anim.);
         Flipper.setInAnimation(inAnim);
         Flipper.setInAnimation(outAnim);
+    }
+
+    private void showDisconnectedInternetMessage() {
+        SnackMessage = Snackbar.make(RelContent, getString(R.string.no_internet), Snackbar.LENGTH_LONG);
+        SnackMessage.show();
+    }
+
+    private String getSummery() {
+        String summery = "";
+        if (RBMeal.isChecked())
+            summery += "آقای ";
+        if (RBFeMeal.isChecked())
+            summery += "خانم ";
+        if (!EdtFirstName.getText().toString().equals(""))
+            summery += String.format("%s ", EdtFirstName.getText());
+        if (!EdtLastName.getText().toString().equals(""))
+            summery += String.format("%s ", EdtLastName.getText());
+        if (!EdtFatherName.getText().toString().equals(""))
+            summery += String.format("فرزند %s ", EdtFatherName.getText());
+        if (YearOfDead != null && YearOfDead != "")
+            summery += String.format("،سال فوت %s", YearOfDead);
+
+        if (summery.equals("آقای "))
+            summery = "آقایان";
+        else if (summery.equals("خانم "))
+            summery = "بانوان";
+
+        return summery;
     }
 
 }

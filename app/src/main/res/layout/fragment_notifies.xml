@@ -5,33 +5,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff">
+    android:background="#fff"
+    android:id="@+id/rel_content_notify_parent">
 
-    <ImageView
-        android:id="@+id/img_bg_notify"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
+        <ImageView
+            android:id="@+id/img_bg_notify"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
 
-    <ImageView
-        android:id="@+id/img_toolbar_notify"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:scaleType="centerCrop"
-        android:layout_marginTop="50dp"/>
+        <ImageView
+            android:id="@+id/img_toolbar_notify"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="50dp"/>
 
+        <TextView
+            android:id="@+id/txt_notify_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="      اعلامیه ها      "
+            android:textSize="50sp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignTop="@+id/img_toolbar_notify"
+            android:layout_alignBottom="@+id/img_toolbar_notify"
+            android:gravity="bottom"
+            android:layout_marginTop="20dp"/>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_toolbar_notify"
+            android:background="#fff">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_notifies_activity"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-        app:layoutManager="android.support.v7.widget.GridLayoutManager"
-        tools:listitem="@layout/notifies_recycler_view_item"
-        tools:spanCount="2"
-        android:layout_below="@+id/img_toolbar_notify"
-        android:background="#fff"/>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_notifies_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible"
+                    app:layoutManager="android.support.v7.widget.GridLayoutManager"
+                    tools:listitem="@layout/notifies_recycler_view_item"
+                    tools:spanCount="2"/>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/img_bg_effect_notify"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:layout_below="@+id/img_toolbar_notify"/>
 
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/av_loading_announcement"
@@ -42,12 +66,5 @@
         app:indicatorColor="#9E9E9E"
         app:indicatorName="BallScaleMultipleIndicator"
         android:layout_centerInParent="true"/>
-
-    <ImageView
-        android:id="@+id/img_bg_effect_notify"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:layout_below="@+id/img_toolbar_notify"/>
 
 </RelativeLayout>

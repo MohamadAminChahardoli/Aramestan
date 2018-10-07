@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/rel_content_search">
 
     <ImageView
         android:id="@+id/img_bg"
@@ -26,7 +27,8 @@
         android:layout_centerHorizontal="true"
         android:layout_alignTop="@+id/img_toolbar"
         android:layout_alignBottom="@+id/img_toolbar"
-        android:gravity="bottom"/>
+        android:gravity="bottom"
+        android:layout_marginTop="20dp"/>
 
 
 

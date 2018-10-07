@@ -9,8 +9,8 @@
     android:layout_gravity="right"
     android:background="?selectableItemBackground"
     android:layout_margin="8dp"
-    app:cardCornerRadius="4dp"
-    app:cardElevation="3dp">
+    app:cardCornerRadius="7dp"
+    app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,11 +39,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:background="@drawable/round_shape"
-            android:padding="8dp"
-            android:layout_marginTop="5dp"
+            android:padding="3dp"
             android:text="1397/11/01"
             android:textColor="#fff"
             android:textStyle="bold"
-            android:textSize="12sp"/>
+            android:textSize="14sp"
+            android:layout_gravity="bottom"/>
     </LinearLayout>
 </android.support.v7.widget.CardView>

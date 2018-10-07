@@ -1,9 +1,12 @@
 package company.aryasoft.aramestan.Fragments;
 
 
+import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -20,6 +24,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 import java.util.ArrayList;
 import java.util.List;
 
+import company.aryasoft.aramestan.Activities.DetailActivity;
 import company.aryasoft.aramestan.Adapters.NotifiesRecyclerAdapter;
 import company.aryasoft.aramestan.ApiConnection.ApiServiceGenerator;
 import company.aryasoft.aramestan.ApiConnection.DeceasedApis;
@@ -28,6 +33,7 @@ import company.aryasoft.aramestan.Implementations.AnnouncementCallBackImpl;
 import company.aryasoft.aramestan.Models.Announcement;
 import company.aryasoft.aramestan.Models.SliderDataModel;
 import company.aryasoft.aramestan.R;
+import company.aryasoft.aramestan.Utils.Networking;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -48,6 +54,10 @@ public class NotifiesFragment extends Fragment
     private ImageView ImgBg;
     private ImageView ImgToolbar;
     private ImageView ImgBgEffect;
+    private RelativeLayout RelContentParent;
+    private TextView TxtNotifyTitle;
+    private Snackbar SnackMessage;
+    private Context ContextInstance;
 
     public NotifiesFragment()
     {
@@ -57,8 +67,7 @@ public class NotifiesFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Api = ApiServiceGenerator.getApiService();
-        AnnouncementCall = Api.getAnnouncements(DefaultSkipItems, DefaultTakeItems);
+        ContextInstance = getContext();
     }
 
     @Override
@@ -72,10 +81,10 @@ public class NotifiesFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
         initializeComponents(view);
-        initializeComponentsEvents();
-        Glide.with(getContext()).load(R.drawable.bg1).into(ImgBg);
-        Glide.with(getContext()).load(R.drawable.about_cloud).into(ImgToolbar);
-        Glide.with(getContext()).load(R.drawable.mydetail).into(ImgBgEffect);
+        Glide.with(ContextInstance).load(R.drawable.bg1).into(ImgBg);
+        Glide.with(ContextInstance).load(R.drawable.about_cloud).into(ImgToolbar);
+        Glide.with(ContextInstance).load(R.drawable.mydetail).into(ImgBgEffect);
+        getAnnouncements();
     }
 
     @Override
@@ -102,6 +111,10 @@ public class NotifiesFragment extends Fragment
         ImgBg = view.findViewById(R.id.img_bg_notify);
         ImgToolbar = view.findViewById(R.id.img_toolbar_notify);
         ImgBgEffect = view.findViewById(R.id.img_bg_effect_notify);
+        RelContentParent = view.findViewById(R.id.rel_content_notify_parent);
+        TxtNotifyTitle = view.findViewById(R.id.txt_notify_title);
+        Typeface tf = Typeface.createFromAsset(ContextInstance.getAssets(), "fonts/iran_nastaliq.ttf");
+        TxtNotifyTitle.setTypeface(tf);
         setupRecyclerViewNotifies();
     }
 
@@ -145,8 +158,6 @@ public class NotifiesFragment extends Fragment
 
     private void initializeComponentsEvents()
     {
-        AnnouncementCall.enqueue(new AnnouncementCallBackImpl(this));
-        showLoading();
     }
 
     private void showLoading()
@@ -157,6 +168,48 @@ public class NotifiesFragment extends Fragment
     private void hideLoading()
     {
         AVLoadingAnnouncement.hide();
+    }
+
+    private void getAnnouncements() {
+        if (Networking.isNetworkAvailable(ContextInstance))
+        {
+            Api = ApiServiceGenerator.getApiService();
+            AnnouncementCall = Api.getAnnouncements(DefaultSkipItems, DefaultTakeItems);
+            AnnouncementCall.enqueue(new AnnouncementCallBackImpl(this));
+            if (SnackMessage != null && SnackMessage.isShown())
+            {
+                SnackMessage.dismiss();
+                recyclerNotifies.setVisibility(View.VISIBLE);
+            }
+            showLoading();
+        }
+        else
+        {
+            showDisconnectedInternetMessage();
+            recyclerNotifies.setVisibility(View.INVISIBLE);
+            hideLoading();
+        }
+
+    }
+
+    private void showDisconnectedInternetMessage()
+    {
+        SnackMessage = Snackbar.make(RelContentParent, getString(R.string.no_internet), Snackbar.LENGTH_INDEFINITE);
+        SnackMessage.show();
+        SnackMessage.setAction(getString(R.string.retry), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Networking.isNetworkAvailable(ContextInstance))
+                {
+                    getAnnouncements();
+                    SnackMessage.dismiss();
+                }
+                else
+                {
+                    showDisconnectedInternetMessage();
+                }
+            }
+        });
     }
 
 }

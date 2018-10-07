@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.DetailActivity">
+    tools:context=".Activities.DetailActivity"
+    android:id="@+id/rel_content_search_detail">
 
     <ImageView
         android:id="@+id/img_bg_search_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-         />
+        android:scaleType="centerCrop" />
 
     <ImageView
         android:id="@+id/img_toolbar_search_detail"
@@ -37,6 +37,7 @@
         android:src="@drawable/mydetail"/>
 
     <ScrollView
+        android:id="@+id/scroll_detail_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="100dp">
@@ -59,7 +60,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_title_full_name_detail"
-                android:text="شهید نام نام خانوادگی"
                 android:layout_below="@+id/img_deceased_photo_detail"
                 android:layout_centerHorizontal="true"
                 android:textSize="16sp"
@@ -69,7 +69,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_father_name_detail"
-                android:text="فرزند نام پدر"
                 android:layout_below="@+id/txt_title_full_name_detail"
                 android:layout_centerHorizontal="true"
                 android:textSize="16sp"
@@ -79,17 +78,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_birth_date"
-                android:text="تاریخ تولد"
                 android:layout_below="@+id/txt_father_name_detail"
                 android:layout_centerHorizontal="true"
                 android:textSize="16sp"
                 android:layout_marginTop="5dp"/>
-            PlaceMartyr
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_dead_date"
-                android:text="تاریخ وفات"
                 android:layout_below="@+id/txt_birth_date"
                 android:layout_centerHorizontal="true"
                 android:textSize="16sp"
@@ -99,7 +95,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_place_martyr"
-                android:text="محل شهادت"
                 android:layout_below="@+id/txt_dead_date"
                 android:layout_centerHorizontal="true"
                 android:textSize="16sp"
@@ -117,17 +112,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:id="@+id/txt_grave_address_title_"
-                    android:text="نشانی قبر مرحوم"
                     android:layout_centerHorizontal="true"
                     android:textSize="18sp"
                     android:gravity="center"
+                    android:text="@string/grave_address"
                     android:background="@drawable/txt_grave_title_style"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/txt_block_name"
-                    android:text="نام قطعه"
                     android:layout_below="@+id/txt_grave_address_title_"
                     android:layout_centerHorizontal="true"
                     android:textSize="16sp"
@@ -137,7 +131,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/txt_row_number"
-                    android:text="شماره ردیف: 75242"
                     android:layout_below="@+id/txt_block_name"
                     android:layout_centerHorizontal="true"
                     android:textSize="16sp"
@@ -147,7 +140,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/txt_grave_number"
-                    android:text="شماره قبر: 68473"
                     android:layout_below="@+id/txt_row_number"
                     android:layout_centerHorizontal="true"
                     android:textSize="16sp"

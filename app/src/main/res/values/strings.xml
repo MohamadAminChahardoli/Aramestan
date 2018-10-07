@@ -21,4 +21,7 @@
     <string name="show_grave_location_on_map">نمایش محل دفن روی نقشه</string>
     <string name="not_found">موردی پیدا نشد</string>
     <string name="search">جستجو کن</string>
+    <string name="no_internet">اتصال به اینترنت برقرار نیست.</string>
+    <string name="retry">تلاش مجدد</string>
+    <string name="grave_address">نشانی قبر مرحوم</string>
 </resources>
