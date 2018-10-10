@@ -54,7 +54,6 @@ public class NewsDetailsActivity extends AppCompatActivity implements NewsDetail
         getNewsDetails(News.getInt("news_id"));
     }
 
-
     @Override
     public void onNewsDetailReceived(Response<NewsDetailModel> response) {
         bindViews(response.body());

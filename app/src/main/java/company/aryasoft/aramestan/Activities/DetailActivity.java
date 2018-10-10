@@ -30,6 +30,7 @@ import company.aryasoft.aramestan.ApiConnection.DeceasedApis;
 import company.aryasoft.aramestan.Implementations.DetailsCallBackImpl;
 import company.aryasoft.aramestan.Models.DetailDeceasedApiModel;
 import company.aryasoft.aramestan.R;
+import company.aryasoft.aramestan.Utils.CuteToast;
 import company.aryasoft.aramestan.Utils.Networking;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -73,7 +74,8 @@ public class DetailActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_show_location) {
+        if (v.getId() == R.id.btn_show_location)
+        {
             showGraveLocation();
         }
     }
@@ -130,7 +132,7 @@ public class DetailActivity extends AppCompatActivity
                 Provider = locationManager.getBestProvider(criteria, false);
                 if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                 {
-                    locationManager.requestLocationUpdates(Provider, 12000, 7, DetailActivity.this);
+                    locationManager.requestLocationUpdates(Provider, 500, 7, DetailActivity.this);
                 }
             }
         }
@@ -190,30 +192,44 @@ public class DetailActivity extends AppCompatActivity
         deceasedLongitude = Double.parseDouble(detailDeceased.getLongitude());
     }
 
-    private void showGraveLocation() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+    private void showGraveLocation()
+    {
+        if (Networking.isNetworkAvailable(DetailActivity.this))
         {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+            }
+            else
+            {
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                boolean gpsStatus = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                if (!gpsStatus)
+                {
+                    CuteToast.show(this, "کاربر گرامی لطفا GPS گوشی خود را فعال کنید.", Toast.LENGTH_LONG);
+                    return;
+                }
+                criteria = new Criteria();
+                Provider = locationManager.getBestProvider(criteria, false);
+                locationManager.requestLocationUpdates(Provider, 500, 7, DetailActivity.this);
+                CuteToast.show(this, "درحال مکان یابی... این عمل ممکن است کمی زمان ببرد. لطفا شکیبا باشید.", Toast.LENGTH_LONG);
+            }
+            setPermissionVerifiedListener(new onPermissionVerifiedListener()
+            {
+                @Override
+                public void onPermissionVerified(Location location)
+                {
+                    personLatitude = location.getLatitude();
+                    personLongitude = location.getLongitude();
+                    locationManager.removeUpdates(DetailActivity.this);
+                    OpenGoogleMap();
+                }
+            });
         }
         else
         {
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            criteria = new Criteria();
-            Provider = locationManager.getBestProvider(criteria, false);
-            locationManager.requestLocationUpdates(Provider, 12000, 7, DetailActivity.this);
+            CuteToast.show(this, getString(R.string.no_internet), Toast.LENGTH_LONG);
         }
-        setPermissionVerifiedListener(new onPermissionVerifiedListener()
-        {
-            @Override
-            public void onPermissionVerified(Location location)
-            {
-                personLatitude = location.getLatitude();
-                personLongitude = location.getLongitude();
-                Toast.makeText(DetailActivity.this, location.getLatitude() + "", Toast.LENGTH_SHORT).show();
-                Toast.makeText(DetailActivity.this, location.getLongitude() + "", Toast.LENGTH_SHORT).show();
-                OpenGoogleMap();
-            }
-        });
     }
 
     private void showLoading()

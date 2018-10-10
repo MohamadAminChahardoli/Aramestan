@@ -2,6 +2,7 @@ package company.aryasoft.aramestan.Fragments;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -26,19 +30,21 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import company.aryasoft.aramestan.Activities.DetailActivity;
 import company.aryasoft.aramestan.Adapters.AdvertisementRecyclerAdapter;
 import company.aryasoft.aramestan.Adapters.NewsRecyclerAdapter;
 import company.aryasoft.aramestan.Adapters.NotifySliderAdapter;
 import company.aryasoft.aramestan.ApiConnection.ApiServiceGenerator;
 import company.aryasoft.aramestan.ApiConnection.DeceasedApis;
+import company.aryasoft.aramestan.Implementations.AdvertisementLoadMoreCallBack;
 import company.aryasoft.aramestan.Implementations.AdvertisementsCallBackImpl;
 import company.aryasoft.aramestan.Implementations.NewsCallBackImpl;
+import company.aryasoft.aramestan.Implementations.NewsLoadMoreCallBack;
 import company.aryasoft.aramestan.Implementations.SliderCallBackImpl;
 import company.aryasoft.aramestan.Models.Advertisement;
 import company.aryasoft.aramestan.Models.NewsModel;
 import company.aryasoft.aramestan.Models.SliderDataModel;
 import company.aryasoft.aramestan.R;
+import company.aryasoft.aramestan.Utils.CuteToast;
 import company.aryasoft.aramestan.Utils.Networking;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -47,7 +53,10 @@ import retrofit2.Response;
 public class AdvertisementFragment extends Fragment
         implements SliderCallBackImpl.OnSlidesDownloadedListener,
                    NewsCallBackImpl.OnNewsReceivedListener,
-                   AdvertisementsCallBackImpl.OnAdvertisementsReceivedListener
+                   AdvertisementsCallBackImpl.OnAdvertisementsReceivedListener,
+                   AdvertisementLoadMoreCallBack.OnAdvertisementsLoadedMoreListener,
+                   NewsLoadMoreCallBack.OnNewsLoadedMore,
+                   View.OnClickListener
 {
 
     private RecyclerView recyclerAdvertisement;
@@ -60,7 +69,6 @@ public class AdvertisementFragment extends Fragment
     private ImageView ImgToolbar;
     private ImageView ImgFooter;
     private RelativeLayout RelContent;
-    private ScrollView ScrollAds;
     private static int currentPage = 0;
     private DeceasedApis Api;
     private Call<List<SliderDataModel>> SliderCall;
@@ -76,10 +84,25 @@ public class AdvertisementFragment extends Fragment
     private boolean AdvertisementIsLoading=false;
     private boolean AdvertisementDataEnded=false;
     private Snackbar SnackMessage;
+    private ViewFlipper Flipper;
+    private TextView TxtTabAds;
+    private TextView TxtTabNews;
 
     public AdvertisementFragment()
     {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.txt_ads_tab)
+        {
+            loadAdsInFlipper();
+        }
+        else if (v.getId() == R.id.txt_news_tab)
+        {
+            loadNewsInFlipper();
+        }
     }
 
     @Override
@@ -104,6 +127,7 @@ public class AdvertisementFragment extends Fragment
         Glide.with(getContext()).load(R.drawable.bg1).into(ImgBg);
         Glide.with(getContext()).load(R.drawable.about_cloud_rotat).into(ImgToolbar);
         Glide.with(getContext()).load(R.drawable.about_cloud).into(ImgFooter);
+        loadNewsInFlipper();
     }
 
     @Override
@@ -122,6 +146,32 @@ public class AdvertisementFragment extends Fragment
                 ArrayList<NewsModel> news = new ArrayList<>
                         (response.body() == null ? new ArrayList<NewsModel>() : response.body());
                 newsAdapter.AddNewsData(news);
+            }
+        }
+        getAdvertisements();
+    }
+
+    @Override
+    public void onAdvertisementsReceived(Response<List<Advertisement>> response) {
+        if (response.body() != null) {
+            if (response.body().size() > 0)
+            {
+                ArrayList<Advertisement> ads = new ArrayList<>
+                        (response.body() == null ? new ArrayList<Advertisement>() : response.body());
+                advertisementAdapter.addAdvertisementsDataList(ads);
+            }
+        }
+        hideLoading();
+    }
+
+    @Override
+    public void onMoreNewsLoaded(Response<List<NewsModel>> response) {
+        if (response.body() != null) {
+            if (response.body().size() > 0)
+            {
+                ArrayList<NewsModel> news = new ArrayList<>
+                        (response.body() == null ? new ArrayList<NewsModel>() : response.body());
+                newsAdapter.AddNewsData(news);
                 NewsIsLoading = false;
             }
             else
@@ -130,11 +180,11 @@ public class AdvertisementFragment extends Fragment
                 NewsIsLoading = false;
             }
         }
-        getAdvertisements();
+        hideLoading();
     }
 
     @Override
-    public void onAdvertisementsReceived(Response<List<Advertisement>> response) {
+    public void onAMoreAdvertisementsLoaded(Response<List<Advertisement>> response) {
         if (response.body() != null) {
             if (response.body().size() > 0)
             {
@@ -162,7 +212,11 @@ public class AdvertisementFragment extends Fragment
         ImgToolbar = view.findViewById(R.id.img_toolbar_ads);
         ImgFooter = view.findViewById(R.id.img_footer_ads);
         RelContent = view.findViewById(R.id.rel_content_ads_parent);
-        ScrollAds = view.findViewById(R.id.scroll_ads);
+        Flipper = view.findViewById(R.id.flipper_ads);
+        TxtTabAds = view.findViewById(R.id.txt_ads_tab);
+        TxtTabNews = view.findViewById(R.id.txt_news_tab);
+        TxtTabAds.setOnClickListener(this);
+        TxtTabNews.setOnClickListener(this);
         setupNewsRecycler();
         setupAdvertisementsRecycler();
     }
@@ -204,29 +258,32 @@ public class AdvertisementFragment extends Fragment
     {
         newsAdapter = new NewsRecyclerAdapter(getContext());
         recyclerNews.setAdapter(newsAdapter);
-        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,true );
+        final GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerNews.setLayoutManager(mLayoutManager);
         recyclerNews.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy)
             {
-                super.onScrolled(recyclerView, dx, dy);
-                if(!NewsDataEnded)
+                if (newsAdapter.getItemCount() >= NewsDefaultSkipItems)
                 {
-                    int VisibleItemCount = mLayoutManager.getChildCount();
-                    int TotalItemCount = mLayoutManager.getItemCount();
-                    int PastVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
-                    if (NewsIsLoading)
+                    if(!NewsDataEnded)
                     {
-                        return;
-                    }
-                    if ((VisibleItemCount + PastVisibleItem) >= TotalItemCount)
-                    {
-                        NewsDefaultSkipItems+=10;
-                        NewsIsLoading = true;
-                        loadMoreNews();
+                        int VisibleItemCount = mLayoutManager.getChildCount();
+                        int TotalItemCount = mLayoutManager.getItemCount();
+                        int PastVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
+                        if (NewsIsLoading)
+                        {
+                            return;
+                        }
+                        if ((VisibleItemCount + PastVisibleItem) >= TotalItemCount)
+                        {
+                            NewsDefaultSkipItems+=10;
+                            NewsIsLoading = true;
+                            loadMoreNews();
+                        }
                     }
                 }
+                super.onScrolled(recyclerView, dx, dy);
             }
         });
     }
@@ -241,23 +298,26 @@ public class AdvertisementFragment extends Fragment
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy)
             {
-                super.onScrolled(recyclerView, dx, dy);
-                if(!AdvertisementDataEnded)
+                if (advertisementAdapter.getItemCount() >= AdvertisementDefaultSkipItems)
                 {
-                    int VisibleItemCount = mLayoutManager.getChildCount();
-                    int TotalItemCount = mLayoutManager.getItemCount();
-                    int PastVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
-                    if (AdvertisementIsLoading)
+                    if(!AdvertisementDataEnded)
                     {
-                        return;
-                    }
-                    if ((VisibleItemCount + PastVisibleItem) >= TotalItemCount)
-                    {
-                        AdvertisementDefaultSkipItems+=10;
-                        AdvertisementIsLoading = true;
-                        //loadMoreAdvertisements();
+                        int VisibleItemCount = mLayoutManager.getChildCount();
+                        int TotalItemCount = mLayoutManager.getItemCount();
+                        int PastVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
+                        if (AdvertisementIsLoading)
+                        {
+                            return;
+                        }
+                        if ((VisibleItemCount + PastVisibleItem) >= TotalItemCount)
+                        {
+                            AdvertisementDefaultSkipItems+=10;
+                            AdvertisementIsLoading = true;
+                            loadMoreAdvertisements();
+                        }
                     }
                 }
+                super.onScrolled(recyclerView, dx, dy);
             }
         });
     }
@@ -274,16 +334,31 @@ public class AdvertisementFragment extends Fragment
 
     private void loadMoreNews()
     {
-        NewsCall = Api.getAllNews(NewsDefaultSkipItems, NewsDefaultTakeItems);
-        NewsCall.enqueue(new NewsCallBackImpl(this));
-        showLoading();
+        if (Networking.isNetworkAvailable(context))
+        {
+            NewsCall = Api.getAllNews(NewsDefaultSkipItems, NewsDefaultTakeItems);
+            NewsCall.enqueue(new NewsLoadMoreCallBack(this));
+            showLoading();
+        }
+        else
+        {
+            CuteToast.show(getActivity(), context.getString(R.string.no_internet), Toast.LENGTH_LONG);
+            hideLoading();
+        }
     }
 
     private void loadMoreAdvertisements()
     {
-        AdvertisementsCall = Api.getAdvertisements(NewsDefaultSkipItems, NewsDefaultTakeItems);
-        AdvertisementsCall.enqueue(new AdvertisementsCallBackImpl(this));
-        showLoading();
+        if (Networking.isNetworkAvailable(context)) {
+            AdvertisementsCall = Api.getAdvertisements(AdvertisementDefaultSkipItems, AdvertisementDefaultTakeItems);
+            AdvertisementsCall.enqueue(new AdvertisementLoadMoreCallBack(this));
+            showLoading();
+        }
+        else
+        {
+            CuteToast.show(getActivity(), context.getString(R.string.no_internet), Toast.LENGTH_LONG);
+            hideLoading();
+        }
     }
 
     private void getSlider()
@@ -296,13 +371,13 @@ public class AdvertisementFragment extends Fragment
             if (SnackMessage != null && SnackMessage.isShown())
             {
                 SnackMessage.dismiss();
-                ScrollAds.setVisibility(View.VISIBLE);
+                RelContent.setVisibility(View.VISIBLE);
             }
         }
         else
         {
             showDisconnectedInternetMessage();
-            ScrollAds.setVisibility(View.INVISIBLE);
+            RelContent.setVisibility(View.INVISIBLE);
             hideLoading();
         }
 
@@ -338,6 +413,24 @@ public class AdvertisementFragment extends Fragment
                 }
             }
         });
+    }
+
+    private void loadAdsInFlipper()
+    {
+        Flipper.setDisplayedChild(1);
+        TxtTabAds.setTextColor(getResources().getColor(R.color.colorAccent));
+        TxtTabNews.setTextColor(Color.parseColor("#000000"));
+        TxtTabAds.setBackgroundColor(Color.parseColor("#f5f5f5"));
+        TxtTabNews.setBackgroundColor(Color.parseColor("#ffffff"));
+    }
+
+    private void loadNewsInFlipper()
+    {
+        Flipper.setDisplayedChild(0);
+        TxtTabNews.setTextColor(getResources().getColor(R.color.colorAccent));
+        TxtTabAds.setTextColor(Color.parseColor("#000000"));
+        TxtTabAds.setBackgroundColor(Color.parseColor("#ffffff"));
+        TxtTabNews.setBackgroundColor(Color.parseColor("#f5f5f5"));
     }
 
 }

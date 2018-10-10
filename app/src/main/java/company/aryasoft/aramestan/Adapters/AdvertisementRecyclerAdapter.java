@@ -38,6 +38,7 @@ public class AdvertisementRecyclerAdapter extends RecyclerView.Adapter<Advertise
     public void onBindViewHolder(@NonNull AdvertisementRecyclerViewHolder holder, int position)
     {
         final String imageUrl = context.getString(R.string.ImageFolderName) + context.getString(R.string.AdImageFolder) + Advertisements.get(position).getImageName();
+
         Glide.with(context).load(imageUrl).into(holder.imgAdvertisements);
         holder.txtAdDescription.setText(Html.fromHtml( Advertisements.get(position).getDescription()).toString());
     }

@@ -12,13 +12,11 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/main_bottom_bar" />
 
-    <com.roughike.bottombar.BottomBar
+    <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
         android:id="@+id/main_bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        app:bb_tabXmlResource="@xml/main_bottom_bar_tabs"
-        app:bb_inActiveTabColor="@color/bottomBarDeselectedColor"
-        app:bb_activeTabColor="@color/bottomBarSelectedColor"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

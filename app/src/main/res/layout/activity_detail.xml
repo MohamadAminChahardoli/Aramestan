@@ -153,7 +153,7 @@
                     android:layout_below="@+id/txt_grave_number"
                     android:layout_centerHorizontal="true"
                     android:layout_margin="5dp"
-                    android:src="@drawable/route"
+                    app:srcCompat="@drawable/route"
                     app:fabSize="normal"/>
 
                 <TextView

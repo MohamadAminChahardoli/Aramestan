@@ -7,4 +7,5 @@
     <color name="bottomBarDeselectedColor">#90A4AE</color>
     <color name="textColor">#263238</color>
     <color name="hintTextColor">#90A4AE</color>
+    <color name="bottomBarIconColor">#2196f3</color>
 </resources>

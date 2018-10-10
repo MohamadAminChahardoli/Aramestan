@@ -4,6 +4,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -13,20 +14,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -37,7 +39,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 import java.util.Calendar;
 import java.util.List;
 
-import company.aryasoft.aramestan.Activities.DetailActivity;
+import company.aryasoft.aramestan.Activities.MainActivity;
 import company.aryasoft.aramestan.Adapters.DeceasedAdapter;
 import company.aryasoft.aramestan.ApiConnection.ApiServiceGenerator;
 import company.aryasoft.aramestan.ApiConnection.DeceasedApis;
@@ -47,14 +49,18 @@ import company.aryasoft.aramestan.Models.Deceased;
 import company.aryasoft.aramestan.Models.SearchModel;
 import company.aryasoft.aramestan.R;
 import company.aryasoft.aramestan.Utils.Networking;
+import company.aryasoft.aramestan.Utils.VectorDrawablePreLollipopHelper;
+import company.aryasoft.aramestan.Utils.VectorView;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import android.text.TextUtils;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 public class SearchFragment extends Fragment
-        implements View.OnClickListener, SearchCallBackImpl.OnResultReceived, NumberPicker.OnValueChangeListener {
+        implements View.OnClickListener, SearchCallBackImpl.OnResultReceived,
+        NumberPicker.OnValueChangeListener, ViewFlipper.OnLayoutChangeListener,
+        TextView.OnEditorActionListener {
 
     private DeceasedAdapter deceasedAdapter;
     private Button ButtonSearch;
@@ -68,9 +74,10 @@ public class SearchFragment extends Fragment
     private AVLoadingIndicatorView AVLoadingSearch;
     private ImageView ImgBg;
     private ImageView ImgToolbar;
-    private ViewFlipper Flipper;
+    private static ViewFlipper Flipper;
     private TextView TxtSearchSummery;
     private TextView TxtAppTitle;
+    private TextView TxtYearOfDeadCaption;
     private CheckBox ChkUnknownDeadYear;
     private RelativeLayout RelContent;
     private DeceasedApis Api;
@@ -82,7 +89,9 @@ public class SearchFragment extends Fragment
     private String YearOfDead = null;
     private int DifferenceBetweenDateOfADAndDateOfShem = 621;
     private Snackbar SnackMessage;
-
+    private final static int FORM_CHILD = 0;
+    private final static int RESULT_CHILD =1;
+    public static int DisplayedChild = FORM_CHILD;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,7 +110,8 @@ public class SearchFragment extends Fragment
             search();
         } else if (view.getId() == R.id.txt_search_summery) {
             deceasedAdapter.clearAllItems();
-            Flipper.setDisplayedChild(0);
+            Flipper.setDisplayedChild(FORM_CHILD);
+            DisplayedChild = FORM_CHILD;
         }
     }
 
@@ -109,7 +119,7 @@ public class SearchFragment extends Fragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         initializeViews(view);
         initializeComponentsEvents();
-        Toast.makeText(getContext(), YearOfDead + "", Toast.LENGTH_SHORT).show();
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         Glide.with(getContext()).load(R.drawable.bg1).into(ImgBg);
         Glide.with(getContext()).load(R.drawable.about_cloud).into(ImgToolbar);
         setupFlipper();
@@ -128,13 +138,29 @@ public class SearchFragment extends Fragment
         }
 
         hideLoading();
-        Flipper.setDisplayedChild(1);
+        Flipper.setDisplayedChild(RESULT_CHILD);
+        DisplayedChild = RESULT_CHILD;
 
     }
 
     @Override
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
         YearOfDead = newVal + "";
+    }
+
+    @Override
+    public void onLayoutChange(View view, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+        if (view instanceof ViewFlipper && Flipper.getDisplayedChild() == FORM_CHILD)
+        {
+            deceasedAdapter.clearAllItems();
+        }
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_SEARCH)
+            search();
+        return false;
     }
 
     private void initializeViews(View view) {
@@ -151,9 +177,13 @@ public class SearchFragment extends Fragment
         ImgToolbar = view.findViewById(R.id.img_toolbar);
         Flipper = view.findViewById(R.id.view_flipper_search);
         TxtSearchSummery = view.findViewById(R.id.txt_search_summery);
+        VectorDrawablePreLollipopHelper.SetVectors(getResources(), new VectorView(R.drawable.ic_youtube_searched_for_black_24dp, TxtSearchSummery, VectorDrawablePreLollipopHelper.MyDirType.start));
         TxtAppTitle = view.findViewById(R.id.txt_app_title);
-        RelContent = view.findViewById(R.id.rel_content_search);
+        TxtYearOfDeadCaption = view.findViewById(R.id.txt_choose_date_of_death);
+        VectorDrawablePreLollipopHelper.SetVectors(getResources(), new VectorView(R.drawable.event, TxtYearOfDeadCaption, VectorDrawablePreLollipopHelper.MyDirType.end));
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/iran_nastaliq.ttf");
+        RelContent = view.findViewById(R.id.rel_content_search);
+        RelContent.requestFocus();
         TxtAppTitle.setTypeface(tf);
         ChkUnknownDeadYear = view.findViewById(R.id.chk_unknown_dead_year);
         ChkUnknownDeadYear.setOnClickListener(new View.OnClickListener() {
@@ -171,6 +201,10 @@ public class SearchFragment extends Fragment
         TxtSearchSummery.setOnClickListener(this);
         setupSearchResultRecyclerView();
         setupNumberPicker();
+
+        EdtFirstName.setOnEditorActionListener(this);
+        EdtLastName.setOnEditorActionListener(this);
+        EdtFatherName.setOnEditorActionListener(this);
     }
 
     private void initializeComponentsEvents() {
@@ -180,7 +214,6 @@ public class SearchFragment extends Fragment
     private void search() {
         if (Networking.isNetworkAvailable(getActivity())) {
             SearchCall = Api.lookForDeceased(getSearchModel(), DefaultSkipItems, DefaultTakeItems);
-            Toast.makeText(getContext(), DefaultSkipItems + "", Toast.LENGTH_SHORT).show();
             SearchCall.enqueue(new SearchCallBackImpl(this));
             showLoading();
             if (SnackMessage != null && SnackMessage.isShown()) {
@@ -188,6 +221,7 @@ public class SearchFragment extends Fragment
             }
         } else {
             showDisconnectedInternetMessage();
+            hideLoading();
         }
 
     }
@@ -244,7 +278,7 @@ public class SearchFragment extends Fragment
                         if ((VisibleItemCount + PastVisibleItem) >= TotalItemCount) {
                             DefaultSkipItems += DefaultTakeItems;
                             IsLoading = true;
-                            //search();
+                            search();
                         }
                     }
                 }
@@ -277,6 +311,7 @@ public class SearchFragment extends Fragment
         Animation outAnim = AnimationUtils.loadAnimation(getContext(), R.anim.flip_out);
         Flipper.setInAnimation(inAnim);
         Flipper.setInAnimation(outAnim);
+        Flipper.addOnLayoutChangeListener(this);
     }
 
     private void showDisconnectedInternetMessage() {
@@ -297,7 +332,7 @@ public class SearchFragment extends Fragment
         if (!EdtFatherName.getText().toString().equals(""))
             summery += String.format("فرزند %s ", EdtFatherName.getText());
         if (YearOfDead != null && YearOfDead != "")
-            summery += String.format("،سال فوت %s", YearOfDead);
+            summery += String.format("، سال فوت %s", YearOfDead);
 
         if (summery.equals("آقای "))
             summery = "آقایان";
@@ -305,6 +340,12 @@ public class SearchFragment extends Fragment
             summery = "بانوان";
 
         return summery;
+    }
+
+    public static void closeFlipper()
+    {
+        Flipper.setDisplayedChild(FORM_CHILD);
+        DisplayedChild = FORM_CHILD;
     }
 
 }
