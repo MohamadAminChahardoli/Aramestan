@@ -12,10 +12,10 @@
         android:pivotX = "50%"
         android:pivotY = "-50%"
         />
-    <translate
+   <!-- <translate
         android:fromYDelta="50%"
         android:toYDelta="0"
         android:startOffset="200"
         android:duration="200"
-        />
+        />-->
 </set>

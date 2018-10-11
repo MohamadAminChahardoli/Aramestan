@@ -133,7 +133,7 @@ public class NotifiesFragment extends Fragment
     {
         notifiesAdapter = new NotifiesRecyclerAdapter(getContext());
         recyclerNotifies.setAdapter(notifiesAdapter);
-        final GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(),2);
+        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerNotifies.setLayoutManager(mLayoutManager);
         recyclerNotifies.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

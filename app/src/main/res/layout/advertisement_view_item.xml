@@ -17,7 +17,7 @@
         <ImageView
             android:id="@+id/img_ad"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="170dp"
             android:layout_alignParentRight="true"
             android:scaleType="centerCrop"/>
 
@@ -26,8 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/img_ad"
-            android:lineSpacingExtra="5dp"
-            android:padding="15dp"
+            android:lineSpacingExtra="3dp"
+            android:padding="10dp"
             android:textColor="#000" />
 
     </RelativeLayout>

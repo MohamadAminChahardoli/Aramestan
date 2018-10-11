@@ -69,7 +69,7 @@ public class AdvertisementFragment extends Fragment
     private ImageView ImgToolbar;
     private ImageView ImgFooter;
     private RelativeLayout RelContent;
-    private static int currentPage = 0;
+    private int currentPage = 0;
     private DeceasedApis Api;
     private Call<List<SliderDataModel>> SliderCall;
     private Call<List<NewsModel>> NewsCall;
@@ -87,6 +87,7 @@ public class AdvertisementFragment extends Fragment
     private ViewFlipper Flipper;
     private TextView TxtTabAds;
     private TextView TxtTabNews;
+    private final int SLIDING_DELAY = 5000;
 
     public AdvertisementFragment()
     {
@@ -230,28 +231,28 @@ public class AdvertisementFragment extends Fragment
     private void setupSlider(final ArrayList<SliderDataModel> slides)
     {
         sliderPager.setAdapter(new NotifySliderAdapter(context, slides));
-       final Handler handler = new Handler();
-        final Runnable Update = new Runnable()
-        {
-            public void run()
-            {
-                if (currentPage == slides.size())
-                {
-                    currentPage = 0;
-                }
-                sliderPager.setCurrentItem(currentPage++, true);
-            }
-        };
-        Timer swipeTimer = new Timer();
-        swipeTimer.schedule(new TimerTask()
-        {
+        new Handler().post(new Runnable() {
             @Override
-            public void run()
-            {
-                handler.post(Update);
+            public void run() {
+             slide(slides.size());
             }
-        }, 3000, 3000);
+        });
+    }
 
+    private void slide(final int count)
+    {
+        Handler handler = new Handler();
+        if (currentPage == count)
+        {
+            currentPage = 0;
+        }
+        sliderPager.setCurrentItem(currentPage++, true);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                slide(count);
+            }
+        }, SLIDING_DELAY);
     }
 
     private void setupNewsRecycler()

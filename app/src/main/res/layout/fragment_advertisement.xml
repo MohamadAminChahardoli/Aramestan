@@ -67,6 +67,11 @@
                     android:clickable="true"
                     android:textColor="#000"
                     android:background="?android:selectableItemBackground"/>
+                
+                <TextView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#eeeeee"/>
 
                 <TextView
                     android:id="@+id/txt_news_tab"
