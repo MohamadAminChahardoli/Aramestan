@@ -2,15 +2,12 @@ package company.aryasoft.aramestan.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.ImageDecoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -19,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import company.aryasoft.aramestan.Activities.DetailActivity;
-import company.aryasoft.aramestan.Activities.MainActivity;
-import company.aryasoft.aramestan.App.MyApplication;
 import company.aryasoft.aramestan.Models.Deceased;
 import company.aryasoft.aramestan.R;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -42,7 +37,7 @@ public class DeceasedAdapter extends RecyclerView.Adapter<DeceasedAdapter.Deceas
     @Override
     public DeceasedViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.deceased_seratch_result_item_layout, viewGroup, false);
+                .inflate(R.layout.deceased_search_result_item_layout, viewGroup, false);
 
         return new DeceasedViewHolder(itemView);
     }
@@ -50,12 +45,11 @@ public class DeceasedAdapter extends RecyclerView.Adapter<DeceasedAdapter.Deceas
     @Override
     public void onBindViewHolder(@NonNull DeceasedViewHolder deceasedViewHolder, final int position) {
         Deceased deceased = DeceasedList.get(position);
-        //deceasedViewHolder.ImageDeceasedPhoto.setBackgroundResource(deceased.getImageName());
         String imageUrl = ContextInstance.getString(R.string.ImageFolderName) + ContextInstance.getString(R.string.DeadImageFolder) + deceased.getImageName();
         Glide.with(ContextInstance).load(imageUrl).into(deceasedViewHolder.ImageDeceasedPhoto);
         if (deceased.getDefunctTitle().contains("عادی"))
         {
-            deceased.setDefunctTitle("مرحوم ");
+            deceased.setDefunctTitle("شادروان");
         }
         String titleAndFullName = deceased.getDefunctTitle() + " " + deceased.getFullName();
         deceasedViewHolder.TextTitleFullName.setText(titleAndFullName);

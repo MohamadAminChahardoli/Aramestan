@@ -40,6 +40,7 @@
             android:padding="3dp"
             android:textColor="#fff"
             android:textSize="12sp"
+            android:text="26564654"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="2dp"/>
     </RelativeLayout>

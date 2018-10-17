@@ -14,28 +14,29 @@
     <ImageView
         android:id="@+id/img_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="300dp"
         android:scaleType="centerCrop"
         android:layout_marginTop="0dp"/>
 
     <TextView
         android:id="@+id/txt_app_title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="70dp"
-        android:textSize="40sp"
+        android:text="      آرامستان      "
+        android:textSize="60sp"
         android:textColor="#fff000"
         android:layout_centerHorizontal="true"
         android:layout_alignTop="@+id/img_toolbar"
-        android:gravity="center|bottom"
-        android:layout_marginTop="20dp"
-        android:text="@string/title" />
+        android:gravity="bottom"
+        android:layout_marginTop="40dp"/>
 
     <ViewFlipper
         android:id="@+id/view_flipper_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/txt_app_title">
+        android:layout_below="@+id/txt_app_title"
+        android:layout_marginTop="100dp">
 
         <RelativeLayout
             android:id="@+id/search_panel"
@@ -54,61 +55,61 @@
                     <EditText
                         android:id="@+id/edt_first_name"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="40dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginEnd="40dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="80dp"
                         android:background="@drawable/edt_search_style"
                         android:gravity="center"
                         android:hint="@string/text_hint_first_name"
                         android:textColor="@color/textColor"
                         android:textColorHint="@color/hintTextColor"
-                        android:textSize="14sp"
+                        android:textSize="18sp"
                         android:imeOptions="actionSearch"
                         android:maxLines="1"/>
 
                     <EditText
                         android:id="@+id/edt_last_name"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="80dp"
                         android:layout_below="@+id/edt_first_name"
-                        android:layout_marginStart="40dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="40dp"
                         android:background="@drawable/edt_search_style"
                         android:gravity="center"
                         android:hint="@string/text_hint_last_name"
                         android:textColor="@color/textColor"
                         android:textColorHint="@color/hintTextColor"
-                        android:textSize="14sp"
+                        android:textSize="18sp"
                         android:imeOptions="actionSearch"
                         android:maxLines="1"/>
 
                     <EditText
                         android:id="@+id/edt_father_name"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="80dp"
                         android:layout_below="@+id/edt_last_name"
-                        android:layout_marginStart="40dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="40dp"
                         android:background="@drawable/edt_search_style"
                         android:gravity="center"
                         android:hint="@string/text_hint_father_name"
                         android:textColor="@color/textColor"
                         android:textColorHint="@color/hintTextColor"
-                        android:textSize="14sp"
+                        android:textSize="18sp"
                         android:imeOptions="actionSearch"
                         android:maxLines="1"/>
 
                     <RadioGroup
                         android:id="@+id/rg_gender"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
                         android:layout_below="@+id/edt_father_name"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginStart="40dp"
-                        android:layout_marginEnd="40dp"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="80dp"
                         android:gravity="center"
                         android:layoutDirection="rtl"
                         android:orientation="horizontal"
@@ -142,9 +143,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/rg_gender"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginStart="40dp"
-                        android:layout_marginEnd="40dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginEnd="80dp"
                         android:background="@drawable/rg_gender_bg">
 
                         <TextView
@@ -155,7 +156,7 @@
                             android:layout_marginBottom="3dp"
                             android:gravity="end|center"
                             android:text="   سال فوت"
-                            android:padding="2dp"
+                            android:padding="10dp"
                             android:layout_marginEnd="10dp"/>
 
                         <TextView
@@ -177,33 +178,33 @@
                         <com.shawnlin.numberpicker.NumberPicker
                             android:id="@+id/number_picker"
                             android:layout_width="wrap_content"
-                            android:layout_height="50dp"
+                            android:layout_height="80dp"
                             android:layout_below="@+id/chk_unknown_dead_year"
                             android:layout_centerHorizontal="true"
                             app:np_dividerColor="#eeeeee"
-                            app:np_height="64dp"
+                            app:np_height="80dp"
                             app:np_orientation="horizontal"
                             app:np_selectedTextColor="@color/colorPrimaryDark"
-                            app:np_selectedTextSize="16sp"
+                            app:np_selectedTextSize="18sp"
                             app:np_textColor="@color/colorPrimary"
-                            app:np_textSize="13sp"
+                            app:np_textSize="15sp"
                             app:np_width="180dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp" />
-
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="15dp"/>
 
                     </RelativeLayout>
 
                     <Button
                         android:id="@+id/btn_search"
-                        android:layout_width="100dp"
-                        android:layout_height="35dp"
+                        android:layout_width="150dp"
+                        android:layout_height="50dp"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@+id/rel_year_panel"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="3dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="10dp"
                         android:text="@string/search"
                         android:textColor="#fff"
+                        android:textSize="18sp"
                         android:background="@drawable/btn_search_style"/>
 
                 </RelativeLayout>
@@ -213,8 +214,8 @@
             <com.wang.avi.AVLoadingIndicatorView
                 android:id="@+id/av_loading_search"
                 style="@style/AVLoadingIndicatorView.Large"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:visibility="gone"
                 app:indicatorColor="#9E9E9E"
                 app:indicatorName="BallScaleMultipleIndicator"
@@ -245,7 +246,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textColor="#757575"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:layout_marginStart="10dp"/>
 
             </android.support.v7.widget.CardView>

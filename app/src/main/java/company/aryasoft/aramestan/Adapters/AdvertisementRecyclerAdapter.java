@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 
 import company.aryasoft.aramestan.Models.Advertisement;
 import company.aryasoft.aramestan.R;
+import company.aryasoft.aramestan.Utils.CuteToast;
 
 public class AdvertisementRecyclerAdapter extends RecyclerView.Adapter<AdvertisementRecyclerAdapter.AdvertisementRecyclerViewHolder> {
     private ArrayList<Advertisement> Advertisements;
@@ -40,7 +42,8 @@ public class AdvertisementRecyclerAdapter extends RecyclerView.Adapter<Advertise
         final String imageUrl = context.getString(R.string.ImageFolderName) + context.getString(R.string.AdImageFolder) + Advertisements.get(position).getImageName();
 
         Glide.with(context).load(imageUrl).into(holder.imgAdvertisements);
-        holder.txtAdDescription.setText(Html.fromHtml( Advertisements.get(position).getDescription()).toString());
+        String description = Html.fromHtml(Advertisements.get(position).getDescription()).toString();
+        holder.txtAdDescription.setText(description);
     }
 
     @Override

@@ -8,4 +8,5 @@
     <color name="textColor">#263238</color>
     <color name="hintTextColor">#90A4AE</color>
     <color name="bottomBarIconColor">#2196f3</color>
+    <color name="imageBorderColor">#aa757575</color>
 </resources>

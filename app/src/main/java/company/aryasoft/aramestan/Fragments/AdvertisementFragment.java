@@ -125,10 +125,10 @@ public class AdvertisementFragment extends Fragment
         context=view.getContext();
         initializeComponents(view);
         initializeComponentsEvents();
-        Glide.with(getContext()).load(R.drawable.bg1).into(ImgBg);
+        /*Glide.with(getContext()).load(R.drawable.bg1).into(ImgBg);
         Glide.with(getContext()).load(R.drawable.about_cloud_rotat).into(ImgToolbar);
-        Glide.with(getContext()).load(R.drawable.about_cloud).into(ImgFooter);
-        loadNewsInFlipper();
+        Glide.with(getContext()).load(R.drawable.about_cloud).into(ImgFooter);*/
+        loadAdsInFlipper();
     }
 
     @Override
@@ -259,7 +259,7 @@ public class AdvertisementFragment extends Fragment
     {
         newsAdapter = new NewsRecyclerAdapter(getContext());
         recyclerNews.setAdapter(newsAdapter);
-        final GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
+        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerNews.setLayoutManager(mLayoutManager);
         recyclerNews.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -419,19 +419,19 @@ public class AdvertisementFragment extends Fragment
     private void loadAdsInFlipper()
     {
         Flipper.setDisplayedChild(1);
-        TxtTabAds.setTextColor(getResources().getColor(R.color.colorAccent));
-        TxtTabNews.setTextColor(Color.parseColor("#000000"));
-        TxtTabAds.setBackgroundColor(Color.parseColor("#f5f5f5"));
+        TxtTabNews.setTextColor(Color.parseColor("#66000000"));
+        TxtTabAds.setTextColor(Color.parseColor("#ffffff"));
+        TxtTabAds.setBackgroundColor(getResources().getColor(R.color.colorAccent));
         TxtTabNews.setBackgroundColor(Color.parseColor("#ffffff"));
     }
 
     private void loadNewsInFlipper()
     {
         Flipper.setDisplayedChild(0);
-        TxtTabNews.setTextColor(getResources().getColor(R.color.colorAccent));
-        TxtTabAds.setTextColor(Color.parseColor("#000000"));
+        TxtTabNews.setTextColor(Color.parseColor("#ffffff"));
+        TxtTabAds.setTextColor(Color.parseColor("#66000000"));
         TxtTabAds.setBackgroundColor(Color.parseColor("#ffffff"));
-        TxtTabNews.setBackgroundColor(Color.parseColor("#f5f5f5"));
+        TxtTabNews.setBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
 
 }

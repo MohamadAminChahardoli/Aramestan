@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_view_text_size_480">18sp</dimen>
+    <dimen name="margin_top_480">10dp</dimen>
+    <dimen name="text_view_text_size_600">20sp</dimen>
+    <dimen name="margin_top_600">12dp</dimen>
+    <dimen name="text_view_text_size_720">20sp</dimen>
+    <dimen name="margin_top_720">18dp</dimen>
+</resources>

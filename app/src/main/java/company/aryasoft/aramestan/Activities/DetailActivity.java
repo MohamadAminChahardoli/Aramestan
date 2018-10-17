@@ -15,6 +15,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -41,7 +43,6 @@ public class DetailActivity extends AppCompatActivity
         implements View.OnClickListener, DetailsCallBackImpl.OnDetailsReceivedListener, LocationListener {
 
     private FloatingActionButton ButtonShowLocation;
-    private Criteria criteria;
     private LocationManager locationManager;
     private String Provider;
     double personLatitude = 0;
@@ -74,8 +75,7 @@ public class DetailActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_show_location)
-        {
+        if (v.getId() == R.id.btn_show_location) {
             showGraveLocation();
         }
     }
@@ -120,19 +120,33 @@ public class DetailActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 101)
-        {
-            if (grantResults.length > 0)
-            {
-                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (requestCode == 101) {
+            if (grantResults.length > 0) {
+                initializeMap();
+            }
+        }
+    }
+
+    private void initializeMap() {
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        Criteria criteria;
+        if (isNetworkEnabled) {
+            criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                locationManager.requestSingleUpdate(criteria, DetailActivity.this, null);
+            }
+
+        } else {
+            boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if (isGPSEnabled) {
                 criteria = new Criteria();
-                Provider = locationManager.getBestProvider(criteria, false);
-                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-                {
-                    locationManager.requestLocationUpdates(Provider, 500, 7, DetailActivity.this);
+                criteria.setAccuracy(Criteria.ACCURACY_FINE);
+                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    locationManager.requestSingleUpdate(criteria, DetailActivity.this, null);
                 }
             }
         }
@@ -146,7 +160,7 @@ public class DetailActivity extends AppCompatActivity
         TxtFatherName = findViewById(R.id.txt_father_name_detail);
         TxtBirthDate = findViewById(R.id.txt_birth_date);
         TxtDeadDate = findViewById(R.id.txt_dead_date);
-        TxtPlaceMartyr= findViewById(R.id.txt_place_martyr);
+        TxtPlaceMartyr = findViewById(R.id.txt_place_martyr);
         TxtBlockName = findViewById(R.id.txt_block_name);
         TxtRowNumber = findViewById(R.id.txt_row_number);
         TxtGraveNumber = findViewById(R.id.txt_grave_number);
@@ -157,32 +171,26 @@ public class DetailActivity extends AppCompatActivity
         ScrollContent = findViewById(R.id.scroll_detail_content);
     }
 
-    public void setPermissionVerifiedListener(onPermissionVerifiedListener permissionVerifiedListener)
-    {
+    public void setPermissionVerifiedListener(onPermissionVerifiedListener permissionVerifiedListener) {
         this.permissionVerifiedListener = permissionVerifiedListener;
     }
 
-    private void OpenGoogleMap()
-    {
+    private void OpenGoogleMap() {
         String uri = "http://maps.google.com/maps?f=d&hl=en&saddr=" + personLatitude + "," + personLongitude + "&daddr=" + deceasedLatitude + "," + deceasedLongitude;
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
         startActivity(Intent.createChooser(intent, "Select an application"));
     }
 
-    private void bindViews(Bundle bundle, DetailDeceasedApiModel detailDeceased)
-    {
+    private void bindViews(Bundle bundle, DetailDeceasedApiModel detailDeceased) {
         String imageUrl = getString(R.string.ImageFolderName) + getString(R.string.DeadImageFolder) + bundle.getString("image_name");
         Glide.with(this).load(imageUrl).into(ImgDeceasedPhoto);
         TxtTitleFullName.setText(String.format("%s %s", bundle.getString("defunct_title"), bundle.getString("full_name")));
         TxtFatherName.setText(String.format("%s %s", "فرزند", bundle.getString("father_name")));
         TxtBirthDate.setText(String.format("%s %s", "تاریخ تولد :", detailDeceased.getBirthDate()));
         TxtDeadDate.setText(String.format("%s %s", "تاریخ وفات :", detailDeceased.getDeadDate()));
-        if (detailDeceased.getPlaceMartyr()=="" || detailDeceased.getPlaceMartyr() == null)
-        {
+        if (detailDeceased.getPlaceMartyr() == "" || detailDeceased.getPlaceMartyr() == null) {
             TxtPlaceMartyr.setVisibility(View.INVISIBLE);
-        }
-        else
-        {
+        } else {
             TxtPlaceMartyr.setText(String.format("%s %s", "محل شهادت :", detailDeceased.getPlaceMartyr()));
         }
         TxtRowNumber.setText(String.format("%s %s", "شماره ردیف :", detailDeceased.getRowNumber()));
@@ -190,102 +198,94 @@ public class DetailActivity extends AppCompatActivity
         TxtBlockName.setText(String.format("%s %s", "نام قطعه :", detailDeceased.getBlockName()));
         deceasedLatitude = Double.parseDouble(detailDeceased.getLatitude());
         deceasedLongitude = Double.parseDouble(detailDeceased.getLongitude());
+
+        changeSubTextStyle(TxtBirthDate, 0, 13);
+        changeSubTextStyle(TxtDeadDate, 0, 13);
+        changeSubTextStyle(TxtBlockName, 0, 11);
+        changeSubTextStyle(TxtRowNumber, 0, 13);
+        changeSubTextStyle(TxtGraveNumber, 0, 12);
+        if (TxtPlaceMartyr.getText() != "")
+            changeSubTextStyle(TxtPlaceMartyr, 0, 12);
     }
 
-    private void showGraveLocation()
-    {
-        if (Networking.isNetworkAvailable(DetailActivity.this))
-        {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            {
+    private void showGraveLocation() {
+        if (Networking.isNetworkAvailable(DetailActivity.this)) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
-            }
-            else
-            {
-                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            } else {
                 boolean gpsStatus = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                if (!gpsStatus)
-                {
+                if (!gpsStatus) {
                     CuteToast.show(this, "کاربر گرامی لطفا GPS گوشی خود را فعال کنید.", Toast.LENGTH_LONG);
                     return;
                 }
-                criteria = new Criteria();
-                Provider = locationManager.getBestProvider(criteria, false);
-                locationManager.requestLocationUpdates(Provider, 500, 7, DetailActivity.this);
+                initializeMap();
                 CuteToast.show(this, "درحال مکان یابی... این عمل ممکن است کمی زمان ببرد. لطفا شکیبا باشید.", Toast.LENGTH_LONG);
             }
-            setPermissionVerifiedListener(new onPermissionVerifiedListener()
-            {
+            setPermissionVerifiedListener(new onPermissionVerifiedListener() {
                 @Override
-                public void onPermissionVerified(Location location)
-                {
+                public void onPermissionVerified(Location location) {
                     personLatitude = location.getLatitude();
                     personLongitude = location.getLongitude();
-                    locationManager.removeUpdates(DetailActivity.this);
                     OpenGoogleMap();
                 }
             });
-        }
-        else
-        {
+        } else {
             CuteToast.show(this, getString(R.string.no_internet), Toast.LENGTH_LONG);
         }
     }
 
-    private void showLoading()
-    {
+    private void showLoading() {
         AVLoading.show();
     }
 
-    private void hideLoading()
-    {
+    private void hideLoading() {
         AVLoading.hide();
     }
 
-    private void getDeceasedDetails()
-    {
-        if (Networking.isNetworkAvailable(this))
-        {
+    private void getDeceasedDetails() {
+        if (Networking.isNetworkAvailable(this)) {
             DeceasedApis api = ApiServiceGenerator.getApiService();
             Call<DetailDeceasedApiModel> detailCall = api.getDeceasedDetails(Deceased.getInt("dead_id"));
             detailCall.enqueue(new DetailsCallBackImpl(this));
             showLoading();
-            if (SnackMessage != null && SnackMessage.isShown())
-            {
+            if (SnackMessage != null && SnackMessage.isShown()) {
                 SnackMessage.dismiss();
                 ScrollContent.setVisibility(View.VISIBLE);
             }
-        }
-        else
-        {
+        } else {
             showDisconnectedInternetMessage();
             ScrollContent.setVisibility(View.INVISIBLE);
         }
 
     }
 
-    private void showDisconnectedInternetMessage()
-    {
+    private void showDisconnectedInternetMessage() {
         SnackMessage = Snackbar.make(ScrollContent, getString(R.string.no_internet), Snackbar.LENGTH_INDEFINITE);
         SnackMessage.show();
         SnackMessage.setAction(getString(R.string.retry), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Networking.isNetworkAvailable(DetailActivity.this))
-                {
+                if (Networking.isNetworkAvailable(DetailActivity.this)) {
                     getDeceasedDetails();
                     SnackMessage.dismiss();
-                }
-                else
-                {
+                } else {
                     showDisconnectedInternetMessage();
                 }
             }
         });
     }
 
-    public interface onPermissionVerifiedListener
-    {
+    private void changeSubTextStyle(TextView textView, int startIndex, int endIndex) {
+        try
+        {
+            SpannableStringBuilder spannable = new SpannableStringBuilder(textView.getText());
+            spannable.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            textView.setText(spannable);
+        }
+        catch(Exception ex){}
+    }
+
+    public interface onPermissionVerifiedListener {
         void onPermissionVerified(Location location);
     }
 

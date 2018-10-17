@@ -11,21 +11,21 @@
         android:id="@+id/img_bg_search_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"/>
 
     <ImageView
         android:id="@+id/img_toolbar_search_detail"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="220dp"
         android:scaleType="centerCrop"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="30dp"/>
 
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
+        android:layout_below="@+id/img_toolbar_search_detail"
         android:background="#fff"/>
 
     <ImageView
@@ -33,27 +33,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:layout_below="@+id/img_toolbar_search_detail"
-        android:src="@drawable/mydetail"/>
+        android:layout_below="@+id/img_toolbar_search_detail" />
 
     <ScrollView
         android:id="@+id/scroll_detail_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="100dp">
+        android:layout_below="@+id/img_toolbar_search_detail">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp">
+            android:padding="30dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_deceased_photo_detail"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
                 android:src="@drawable/no_img"
                 app:civ_border_width="1dp"
-                app:civ_border_color="#FF000000"
+                app:civ_border_color="@color/imageBorderColor"
                 android:layout_centerHorizontal="true"/>
 
             <TextView
@@ -62,8 +61,8 @@
                 android:id="@+id/txt_title_full_name_detail"
                 android:layout_below="@+id/img_deceased_photo_detail"
                 android:layout_centerHorizontal="true"
-                android:textSize="16sp"
-                android:layout_marginTop="5dp"/>
+                android:textSize="@dimen/text_view_text_size_480"
+                android:layout_marginTop="@dimen/margin_top_480"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -71,8 +70,8 @@
                 android:id="@+id/txt_father_name_detail"
                 android:layout_below="@+id/txt_title_full_name_detail"
                 android:layout_centerHorizontal="true"
-                android:textSize="16sp"
-                android:layout_marginTop="5dp"/>
+                android:textSize="@dimen/text_view_text_size_480"
+                android:layout_marginTop="@dimen/margin_top_480"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -80,16 +79,16 @@
                 android:id="@+id/txt_birth_date"
                 android:layout_below="@+id/txt_father_name_detail"
                 android:layout_centerHorizontal="true"
-                android:textSize="16sp"
-                android:layout_marginTop="5dp"/>
+                android:textSize="@dimen/text_view_text_size_480"
+                android:layout_marginTop="@dimen/margin_top_480"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_dead_date"
                 android:layout_below="@+id/txt_birth_date"
                 android:layout_centerHorizontal="true"
-                android:textSize="16sp"
-                android:layout_marginTop="5dp"/>
+                android:textSize="@dimen/text_view_text_size_480"
+                android:layout_marginTop="@dimen/margin_top_480"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -97,20 +96,20 @@
                 android:id="@+id/txt_place_martyr"
                 android:layout_below="@+id/txt_dead_date"
                 android:layout_centerHorizontal="true"
-                android:textSize="16sp"
-                android:layout_marginTop="5dp"/>
+                android:textSize="@dimen/text_view_text_size_480"
+                android:layout_marginTop="@dimen/margin_top_480"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txt_place_martyr"
                 android:background="@drawable/border_style_1"
-                android:layout_marginTop="20dp"
-                android:paddingBottom="20dp">
+                android:layout_marginTop="30dp"
+                android:paddingBottom="30dp">
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="35dp"
                     android:id="@+id/txt_grave_address_title_"
                     android:layout_centerHorizontal="true"
                     android:textSize="18sp"
@@ -124,8 +123,8 @@
                     android:id="@+id/txt_block_name"
                     android:layout_below="@+id/txt_grave_address_title_"
                     android:layout_centerHorizontal="true"
-                    android:textSize="16sp"
-                    android:layout_marginTop="5dp"/>
+                    android:textSize="@dimen/text_view_text_size_480"
+                    android:layout_marginTop="@dimen/margin_top_480"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -133,8 +132,8 @@
                     android:id="@+id/txt_row_number"
                     android:layout_below="@+id/txt_block_name"
                     android:layout_centerHorizontal="true"
-                    android:textSize="16sp"
-                    android:layout_marginTop="5dp"/>
+                    android:textSize="@dimen/text_view_text_size_480"
+                    android:layout_marginTop="@dimen/margin_top_480"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -142,8 +141,8 @@
                     android:id="@+id/txt_grave_number"
                     android:layout_below="@+id/txt_row_number"
                     android:layout_centerHorizontal="true"
-                    android:textSize="16sp"
-                    android:layout_marginTop="5dp"/>
+                    android:textSize="@dimen/text_view_text_size_480"
+                    android:layout_marginTop="@dimen/margin_top_480"/>
 
 
                 <android.support.design.widget.FloatingActionButton
@@ -162,7 +161,7 @@
                     android:text="@string/show_grave_location_on_map"
                     android:layout_below="@+id/btn_show_location"
                     android:layout_centerHorizontal="true"
-                    android:textSize="14sp"/>
+                    android:textSize="16sp"/>
 
             </RelativeLayout>
 
@@ -173,8 +172,8 @@
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/av_loading_search_detail"
         style="@style/AVLoadingIndicatorView.Large"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:visibility="gone"
         app:indicatorColor="#9E9E9E"
         app:indicatorName="BallScaleMultipleIndicator"

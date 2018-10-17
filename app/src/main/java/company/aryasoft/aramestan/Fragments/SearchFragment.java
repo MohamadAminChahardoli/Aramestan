@@ -189,8 +189,8 @@ public class SearchFragment extends Fragment
         ChkUnknownDeadYear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NumberPickerDeadYear.setEnabled(!ChkUnknownDeadYear.isChecked());
-                if (ChkUnknownDeadYear.isChecked()) {
+                NumberPickerDeadYear.setEnabled(ChkUnknownDeadYear.isChecked());
+                if (!ChkUnknownDeadYear.isChecked()) {
                     YearOfDead = null;
                 } else {
                     YearOfDead = NumberPickerDeadYear.getValue() + "";
@@ -295,6 +295,7 @@ public class SearchFragment extends Fragment
         NumberPickerDeadYear.setFadingEdgeEnabled(true);
         NumberPickerDeadYear.setScrollerEnabled(true);
         NumberPickerDeadYear.setWrapSelectorWheel(true);
+        NumberPickerDeadYear.setEnabled(false);
         NumberPickerDeadYear.setOnValueChangedListener(this);
     }
 

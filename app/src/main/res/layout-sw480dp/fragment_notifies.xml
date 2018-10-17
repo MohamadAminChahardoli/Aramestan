@@ -8,11 +8,14 @@
     android:background="#fff"
     android:id="@+id/rel_content_notify_parent">
 
+
+
         <ImageView
             android:id="@+id/img_bg_notify"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            android:background="@drawable/bg1"/>
 
         <RelativeLayout
             android:id="@+id/rel_toolbar"
@@ -22,7 +25,7 @@
 
                 <RelativeLayout
                     android:id="@+id/rel_settings"
-                    android:layout_width="60dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="25dp"
@@ -32,18 +35,18 @@
                         <ImageButton
                             android:id="@+id/btn_settings"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
+                            android:layout_height="50dp"
                             app:srcCompat="@drawable/settings"
                             android:background="?android:selectableItemBackground"/>
 
                         <TextView
-                            android:layout_width="60dp"
+                            android:layout_width="70dp"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/btn_settings"
                             android:text="@string/settings_caption"
                             android:textColor="#fff000"
                             android:gravity="center"
-                            android:textSize="12sp"/>
+                            android:textSize="14sp"/>
 
                 </RelativeLayout>
 
@@ -52,9 +55,10 @@
         <ImageView
             android:id="@+id/img_toolbar_notify"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="200dp"
             android:scaleType="centerCrop"
-            android:layout_below="@+id/rel_toolbar"/>
+            android:layout_below="@+id/rel_toolbar"
+            android:background="@drawable/about_cloud"/>
 
         <TextView
             android:id="@+id/txt_notify_title"
@@ -72,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/img_toolbar_notify"
             android:background="#fff"
-            android:layout_marginTop="70dp">
+            android:layout_marginTop="100dp">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_notifies_activity"
@@ -95,8 +99,8 @@
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/av_loading_announcement"
         style="@style/AVLoadingIndicatorView.Large"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:visibility="visible"
         app:indicatorColor="#9E9E9E"
         app:indicatorName="BallScaleMultipleIndicator"

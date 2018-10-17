@@ -5,10 +5,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:padding="20dp">
 
 
     <ImageView
+
         android:id="@+id/img_notifies_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,12 +19,12 @@
 
     <ImageButton
         android:id="@+id/btn_close_notifies_dialog"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="center|bottom"
         android:background="@drawable/btn_close_dialog_style"
         android:clickable="true"
         android:focusable="true"
         app:srcCompat="@drawable/ic_close_notifies_dialog"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="20dp"/>
 </FrameLayout>

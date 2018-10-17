@@ -5,24 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/img_bg_ads"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+    <ImageView
+        android:id="@+id/img_bg_ads"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
 
-        <ImageView
-            android:id="@+id/img_toolbar_ads"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:scaleType="centerCrop" />
+    <ImageView
+        android:id="@+id/img_toolbar_ads"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:scaleType="centerCrop"/>
 
-        <ImageView
-            android:id="@+id/img_footer_ads"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_alignParentBottom="true"
-            android:scaleType="centerCrop" />
+    <ImageView
+        android:id="@+id/img_footer_ads"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:scaleType="centerCrop"/>
 
     <RelativeLayout
         android:id="@+id/rel_content_ads_parent"
@@ -39,7 +39,7 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/slider_pager"
                 android:layout_width="match_parent"
-                android:layout_height="180dp" />
+                android:layout_height="330dp" />
 
         </android.support.v7.widget.CardView>
 
@@ -53,8 +53,8 @@
             app:cardElevation="3dp">
 
             <LinearLayout
-                android:layout_width="220dp"
-                android:layout_height="40dp"
+                android:layout_width="260dp"
+                android:layout_height="50dp"
                 android:weightSum="2">
 
                 <TextView
@@ -66,8 +66,9 @@
                     android:text="@string/ads_tab_label"
                     android:clickable="true"
                     android:textColor="#000"
+                    android:textSize="18sp"
                     android:background="?android:selectableItemBackground"/>
-                
+
                 <TextView
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
@@ -82,6 +83,7 @@
                     android:text="@string/news_tab_label"
                     android:clickable="true"
                     android:textColor="#000"
+                    android:textSize="18sp"
                     android:background="?android:selectableItemBackground"/>
 
             </LinearLayout>
@@ -115,8 +117,8 @@
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/av_loading_slider"
         style="@style/AVLoadingIndicatorView.Large"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_centerInParent="true"
         android:visibility="visible"
         app:indicatorColor="#9E9E9E"
