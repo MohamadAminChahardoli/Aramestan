@@ -130,7 +130,7 @@ public class DetailActivity extends AppCompatActivity
     }
 
     private void initializeMap() {
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         Criteria criteria;
         if (isNetworkEnabled) {
@@ -208,7 +208,9 @@ public class DetailActivity extends AppCompatActivity
             changeSubTextStyle(TxtPlaceMartyr, 0, 12);
     }
 
-    private void showGraveLocation() {
+    private void showGraveLocation()
+    {
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (Networking.isNetworkAvailable(DetailActivity.this)) {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);

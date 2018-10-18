@@ -45,6 +45,7 @@ import company.aryasoft.aramestan.ApiConnection.ApiServiceGenerator;
 import company.aryasoft.aramestan.ApiConnection.DeceasedApis;
 import company.aryasoft.aramestan.App.MyApplication;
 import company.aryasoft.aramestan.Implementations.SearchCallBackImpl;
+import company.aryasoft.aramestan.Implementations.SearchLoadMoreCallBack;
 import company.aryasoft.aramestan.Models.Deceased;
 import company.aryasoft.aramestan.Models.SearchModel;
 import company.aryasoft.aramestan.R;
@@ -59,11 +60,11 @@ import android.widget.ViewFlipper;
 
 public class SearchFragment extends Fragment
         implements View.OnClickListener, SearchCallBackImpl.OnResultReceived,
+        SearchLoadMoreCallBack.OnMoreResultReceived,
         NumberPicker.OnValueChangeListener, ViewFlipper.OnLayoutChangeListener,
         TextView.OnEditorActionListener {
 
     private DeceasedAdapter deceasedAdapter;
-    private Button ButtonSearch;
     private EditText EdtFirstName;
     private EditText EdtLastName;
     private EditText EdtFatherName;
@@ -76,8 +77,6 @@ public class SearchFragment extends Fragment
     private ImageView ImgToolbar;
     private static ViewFlipper Flipper;
     private TextView TxtSearchSummery;
-    private TextView TxtAppTitle;
-    private TextView TxtYearOfDeadCaption;
     private CheckBox ChkUnknownDeadYear;
     private RelativeLayout RelContent;
     private DeceasedApis Api;
@@ -90,7 +89,7 @@ public class SearchFragment extends Fragment
     private int DifferenceBetweenDateOfADAndDateOfShem = 621;
     private Snackbar SnackMessage;
     private final static int FORM_CHILD = 0;
-    private final static int RESULT_CHILD =1;
+    private final static int RESULT_CHILD = 1;
     public static int DisplayedChild = FORM_CHILD;
 
     @Override
@@ -129,18 +128,25 @@ public class SearchFragment extends Fragment
     public void onReceived(Response<List<Deceased>> response) {
         if (response.body().size() > 0) {
             deceasedAdapter.addDeceasedListData(response.body());
-            IsLoading = false;
             TxtSearchSummery.setText(getSummery());
         } else {
-            DataEnded = true;
-            IsLoading = false;
             TxtSearchSummery.setText(getContext().getString(R.string.not_found));
         }
-
         hideLoading();
         Flipper.setDisplayedChild(RESULT_CHILD);
         DisplayedChild = RESULT_CHILD;
+    }
 
+    @Override
+    public void onMoreReceived(Response<List<Deceased>> response) {
+        if (response.body().size() > 0) {
+            deceasedAdapter.addDeceasedListData(response.body());
+            IsLoading = false;
+        } else {
+            DataEnded = true;
+            IsLoading = false;
+        }
+        hideLoading();
     }
 
     @Override
@@ -150,8 +156,7 @@ public class SearchFragment extends Fragment
 
     @Override
     public void onLayoutChange(View view, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-        if (view instanceof ViewFlipper && Flipper.getDisplayedChild() == FORM_CHILD)
-        {
+        if (view instanceof ViewFlipper && Flipper.getDisplayedChild() == FORM_CHILD) {
             deceasedAdapter.clearAllItems();
         }
     }
@@ -164,7 +169,7 @@ public class SearchFragment extends Fragment
     }
 
     private void initializeViews(View view) {
-        ButtonSearch = view.findViewById(R.id.btn_search);
+        Button buttonSearch = view.findViewById(R.id.btn_search);
         RecyclerViewSearchResult = view.findViewById(R.id.recycler_view_search_result);
         EdtFirstName = view.findViewById(R.id.edt_first_name);
         EdtLastName = view.findViewById(R.id.edt_last_name);
@@ -178,13 +183,13 @@ public class SearchFragment extends Fragment
         Flipper = view.findViewById(R.id.view_flipper_search);
         TxtSearchSummery = view.findViewById(R.id.txt_search_summery);
         VectorDrawablePreLollipopHelper.SetVectors(getResources(), new VectorView(R.drawable.ic_youtube_searched_for_black_24dp, TxtSearchSummery, VectorDrawablePreLollipopHelper.MyDirType.start));
-        TxtAppTitle = view.findViewById(R.id.txt_app_title);
-        TxtYearOfDeadCaption = view.findViewById(R.id.txt_choose_date_of_death);
-        VectorDrawablePreLollipopHelper.SetVectors(getResources(), new VectorView(R.drawable.event, TxtYearOfDeadCaption, VectorDrawablePreLollipopHelper.MyDirType.end));
+        TextView txtAppTitle = view.findViewById(R.id.txt_app_title);
+        TextView txtYearOfDeadCaption = view.findViewById(R.id.txt_choose_date_of_death);
+        VectorDrawablePreLollipopHelper.SetVectors(getResources(), new VectorView(R.drawable.event, txtYearOfDeadCaption, VectorDrawablePreLollipopHelper.MyDirType.end));
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/iran_nastaliq.ttf");
         RelContent = view.findViewById(R.id.rel_content_search);
         RelContent.requestFocus();
-        TxtAppTitle.setTypeface(tf);
+        txtAppTitle.setTypeface(tf);
         ChkUnknownDeadYear = view.findViewById(R.id.chk_unknown_dead_year);
         ChkUnknownDeadYear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,7 +202,7 @@ public class SearchFragment extends Fragment
                 }
             }
         });
-        ButtonSearch.setOnClickListener(this);
+        buttonSearch.setOnClickListener(this);
         TxtSearchSummery.setOnClickListener(this);
         setupSearchResultRecyclerView();
         setupNumberPicker();
@@ -215,6 +220,21 @@ public class SearchFragment extends Fragment
         if (Networking.isNetworkAvailable(getActivity())) {
             SearchCall = Api.lookForDeceased(getSearchModel(), DefaultSkipItems, DefaultTakeItems);
             SearchCall.enqueue(new SearchCallBackImpl(this));
+            showLoading();
+            if (SnackMessage != null && SnackMessage.isShown()) {
+                SnackMessage.dismiss();
+            }
+        } else {
+            showDisconnectedInternetMessage();
+            hideLoading();
+        }
+
+    }
+
+    private void loadMoreResult() {
+        if (Networking.isNetworkAvailable(getActivity())) {
+            SearchCall = Api.lookForDeceased(getSearchModel(), DefaultSkipItems, DefaultTakeItems);
+            SearchCall.enqueue(new SearchLoadMoreCallBack(this));
             showLoading();
             if (SnackMessage != null && SnackMessage.isShown()) {
                 SnackMessage.dismiss();
@@ -278,7 +298,7 @@ public class SearchFragment extends Fragment
                         if ((VisibleItemCount + PastVisibleItem) >= TotalItemCount) {
                             DefaultSkipItems += DefaultTakeItems;
                             IsLoading = true;
-                            search();
+                            loadMoreResult();
                         }
                     }
                 }
@@ -343,8 +363,7 @@ public class SearchFragment extends Fragment
         return summery;
     }
 
-    public static void closeFlipper()
-    {
+    public static void closeFlipper() {
         Flipper.setDisplayedChild(FORM_CHILD);
         DisplayedChild = FORM_CHILD;
     }

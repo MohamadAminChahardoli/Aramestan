@@ -16,6 +16,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -65,13 +67,9 @@ public class AdvertisementFragment extends Fragment
     private NewsRecyclerAdapter newsAdapter;
     private ViewPager sliderPager;
     private AVLoadingIndicatorView AVLoadingSlider;
-    private ImageView ImgBg;
-    private ImageView ImgToolbar;
-    private ImageView ImgFooter;
     private RelativeLayout RelContent;
     private int currentPage = 0;
     private DeceasedApis Api;
-    private Call<List<SliderDataModel>> SliderCall;
     private Call<List<NewsModel>> NewsCall;
     private Call<List<Advertisement>> AdvertisementsCall;
     Context context;
@@ -87,7 +85,6 @@ public class AdvertisementFragment extends Fragment
     private ViewFlipper Flipper;
     private TextView TxtTabAds;
     private TextView TxtTabNews;
-    private final int SLIDING_DELAY = 5000;
 
     public AdvertisementFragment()
     {
@@ -125,9 +122,6 @@ public class AdvertisementFragment extends Fragment
         context=view.getContext();
         initializeComponents(view);
         initializeComponentsEvents();
-        /*Glide.with(getContext()).load(R.drawable.bg1).into(ImgBg);
-        Glide.with(getContext()).load(R.drawable.about_cloud_rotat).into(ImgToolbar);
-        Glide.with(getContext()).load(R.drawable.about_cloud).into(ImgFooter);*/
         loadAdsInFlipper();
     }
 
@@ -209,11 +203,12 @@ public class AdvertisementFragment extends Fragment
         sliderPager = view.findViewById(R.id.slider_pager);
         recyclerNews = view.findViewById(R.id.recycler_news);
         AVLoadingSlider = view.findViewById(R.id.av_loading_slider);
-        ImgBg = view.findViewById(R.id.img_bg_ads);
-        ImgToolbar = view.findViewById(R.id.img_toolbar_ads);
-        ImgFooter = view.findViewById(R.id.img_footer_ads);
         RelContent = view.findViewById(R.id.rel_content_ads_parent);
         Flipper = view.findViewById(R.id.flipper_ads);
+        Animation animIn= AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
+        Animation animOut= AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out);
+        Flipper.setInAnimation(animIn);
+        Flipper.setOutAnimation(animOut);
         TxtTabAds = view.findViewById(R.id.txt_ads_tab);
         TxtTabNews = view.findViewById(R.id.txt_news_tab);
         TxtTabAds.setOnClickListener(this);
@@ -247,6 +242,7 @@ public class AdvertisementFragment extends Fragment
             currentPage = 0;
         }
         sliderPager.setCurrentItem(currentPage++, true);
+        int SLIDING_DELAY = 5000;
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -278,7 +274,7 @@ public class AdvertisementFragment extends Fragment
                         }
                         if ((VisibleItemCount + PastVisibleItem) >= TotalItemCount)
                         {
-                            NewsDefaultSkipItems+=10;
+                            NewsDefaultSkipItems+=NewsDefaultTakeItems;
                             NewsIsLoading = true;
                             loadMoreNews();
                         }
@@ -312,7 +308,7 @@ public class AdvertisementFragment extends Fragment
                         }
                         if ((VisibleItemCount + PastVisibleItem) >= TotalItemCount)
                         {
-                            AdvertisementDefaultSkipItems+=10;
+                            AdvertisementDefaultSkipItems+=AdvertisementDefaultTakeItems;
                             AdvertisementIsLoading = true;
                             loadMoreAdvertisements();
                         }
@@ -366,8 +362,8 @@ public class AdvertisementFragment extends Fragment
     {
         if (Networking.isNetworkAvailable(getContext()))
         {
-            SliderCall = Api.getSlider();
-            SliderCall.enqueue(new SliderCallBackImpl(this));
+            Call<List<SliderDataModel>> sliderCall = Api.getSlider();
+            sliderCall.enqueue(new SliderCallBackImpl(this));
             showLoading();
             if (SnackMessage != null && SnackMessage.isShown())
             {
