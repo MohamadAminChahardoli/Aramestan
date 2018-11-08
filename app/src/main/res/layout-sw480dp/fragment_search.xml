@@ -20,15 +20,15 @@
 
     <TextView
         android:id="@+id/txt_app_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="70dp"
-        android:text="      آرامستان      "
+        android:text="@string/title"
         android:textSize="50sp"
         android:textColor="#fff000"
         android:layout_centerHorizontal="true"
         android:layout_alignTop="@+id/img_toolbar"
-        android:gravity="bottom"
+        android:gravity="center|bottom"
         android:layout_marginTop="20dp"/>
 
     <ViewFlipper

@@ -59,7 +59,12 @@ public class MainActivity extends AppCompatActivity{
             }
             else
             {
-                CuteToast.show(this, getString(R.string.exit_message), Toast.LENGTH_LONG);
+                //CuteToast.show(this, getString(R.string.exit_message), Toast.LENGTH_LONG);
+                CuteToast cuteToast = new CuteToast();
+                cuteToast.with(this)
+                        .setDuration(Toast.LENGTH_LONG)
+                        .setText(getString(R.string.exit_message))
+                        .show();
                 IS_ALLOWED_TO_EXIT = true;
                 new Timer().schedule(new TimerTask() {
                     @Override

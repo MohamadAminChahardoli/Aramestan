@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">آرامستان</string>
-    <string name="tab_ads_title">آگهی</string>
+    <string name="tab_ads_title">خدمات</string>
     <string name="tab_search_title">جستجو</string>
     <string name="tab_notifications_title">اعلامیه ها</string>
     <string name="text_hint_name_family">نام و نام خانوادگی مرحوم</string>
@@ -31,6 +31,6 @@
     <string name="receive_notifications_caption">دریافت پوش نوتیفیکیشن ها</string>
     <string name="receive_notification_description">با فعال نمودن این گزینه، پس از فوت هر فرد، شما از طریق یک اعلان فورا مطلع میشوید.</string>
     <string name="title">آرامستان(شهرداری ملایر)</string>
-    <string name="ads_tab_label">آگهی</string>
+    <string name="ads_tab_label">خدمات</string>
     <string name="news_tab_label">رویدادهای مذهبی</string>
 </resources>

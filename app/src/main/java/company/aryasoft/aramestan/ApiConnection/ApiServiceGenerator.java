@@ -19,7 +19,7 @@ public class ApiServiceGenerator {
     private static Gson GsonInstance;
     private static OkHttpClient Client;
     private static OkHttpClient.Builder HttpClient;
-    private final static String BASE_URL = "http://test.aryasoft.org/";
+    private final static String BASE_URL = "http://sa.shahrdarimalayer.ir/";
 
     public static DeceasedApis getApiService()
     {

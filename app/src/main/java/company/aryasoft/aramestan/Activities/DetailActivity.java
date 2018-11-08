@@ -210,6 +210,7 @@ public class DetailActivity extends AppCompatActivity
 
     private void showGraveLocation()
     {
+        CuteToast cuteToast = new CuteToast();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (Networking.isNetworkAvailable(DetailActivity.this)) {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -217,11 +218,19 @@ public class DetailActivity extends AppCompatActivity
             } else {
                 boolean gpsStatus = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 if (!gpsStatus) {
-                    CuteToast.show(this, "کاربر گرامی لطفا GPS گوشی خود را فعال کنید.", Toast.LENGTH_LONG);
+                    //CuteToast.show(this, "کاربر گرامی لطفا GPS گوشی خود را فعال کنید.", Toast.LENGTH_LONG);
+                    cuteToast.with(this)
+                            .setDuration(Toast.LENGTH_LONG)
+                            .setText("کاربر گرامی لطفا GPS گوشی خود را فعال کنید.")
+                            .show();
                     return;
                 }
                 initializeMap();
-                CuteToast.show(this, "درحال مکان یابی... این عمل ممکن است کمی زمان ببرد. لطفا شکیبا باشید.", Toast.LENGTH_LONG);
+                //CuteToast.show(this, "درحال مکان یابی... این عمل ممکن است کمی زمان ببرد. لطفا شکیبا باشید.", Toast.LENGTH_LONG);
+                cuteToast.with(this)
+                        .setDuration(Toast.LENGTH_LONG)
+                        .setText("درحال مکان یابی... این عمل ممکن است کمی زمان ببرد. لطفا شکیبا باشید.")
+                        .show();
             }
             setPermissionVerifiedListener(new onPermissionVerifiedListener() {
                 @Override
@@ -232,7 +241,11 @@ public class DetailActivity extends AppCompatActivity
                 }
             });
         } else {
-            CuteToast.show(this, getString(R.string.no_internet), Toast.LENGTH_LONG);
+            //CuteToast.show(this, getString(R.string.no_internet), Toast.LENGTH_LONG);
+            cuteToast.with(this)
+                    .setDuration(Toast.LENGTH_LONG)
+                    .setText(getString(R.string.no_internet))
+                    .show();
         }
     }
 

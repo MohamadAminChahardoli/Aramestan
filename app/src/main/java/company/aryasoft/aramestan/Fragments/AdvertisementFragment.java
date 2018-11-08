@@ -339,7 +339,12 @@ public class AdvertisementFragment extends Fragment
         }
         else
         {
-            CuteToast.show(getActivity(), context.getString(R.string.no_internet), Toast.LENGTH_LONG);
+            //CuteToast.show(getActivity(), context.getString(R.string.no_internet), Toast.LENGTH_LONG);
+            CuteToast cuteToast = new CuteToast();
+            cuteToast.with(getActivity())
+                    .setDuration(Toast.LENGTH_LONG)
+                    .setText(context.getString(R.string.no_internet))
+                    .show();
             hideLoading();
         }
     }
@@ -353,7 +358,12 @@ public class AdvertisementFragment extends Fragment
         }
         else
         {
-            CuteToast.show(getActivity(), context.getString(R.string.no_internet), Toast.LENGTH_LONG);
+            //CuteToast.show(getActivity(), context.getString(R.string.no_internet), Toast.LENGTH_LONG);
+            CuteToast cuteToast = new CuteToast();
+            cuteToast.with(getActivity())
+                    .setDuration(Toast.LENGTH_LONG)
+                    .setText(context.getString(R.string.no_internet))
+                    .show();
             hideLoading();
         }
     }

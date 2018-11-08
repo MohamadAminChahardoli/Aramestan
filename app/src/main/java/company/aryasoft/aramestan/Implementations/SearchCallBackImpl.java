@@ -1,7 +1,10 @@
 package company.aryasoft.aramestan.Implementations;
 
+import android.widget.Toast;
+
 import java.util.List;
 
+import company.aryasoft.aramestan.App.MyApplication;
 import company.aryasoft.aramestan.Models.Deceased;
 import retrofit2.Call;
 import retrofit2.Callback;

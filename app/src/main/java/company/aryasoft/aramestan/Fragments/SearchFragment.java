@@ -81,7 +81,7 @@ public class SearchFragment extends Fragment
     private RelativeLayout RelContent;
     private DeceasedApis Api;
     private Call<List<Deceased>> SearchCall;
-    private int DefaultSkipItems = 0;
+    private static int DefaultSkipItems = 0;
     private final int DefaultTakeItems = 20;
     private boolean IsLoading = false;
     private boolean DataEnded = false;
@@ -111,6 +111,7 @@ public class SearchFragment extends Fragment
             deceasedAdapter.clearAllItems();
             Flipper.setDisplayedChild(FORM_CHILD);
             DisplayedChild = FORM_CHILD;
+            DefaultSkipItems = 0;
         }
     }
 
@@ -366,6 +367,7 @@ public class SearchFragment extends Fragment
     public static void closeFlipper() {
         Flipper.setDisplayedChild(FORM_CHILD);
         DisplayedChild = FORM_CHILD;
+        DefaultSkipItems = 0;
     }
 
 }
